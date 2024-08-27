@@ -224,16 +224,29 @@
         android:text="@string/desc_menu_4" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_signIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:alpha="0"
         android:backgroundTint="@color/dark_blue"
-        android:text="@string/learn_now"
+        android:text="@string/sign_in"
         app:layout_constraintBottom_toTopOf="@+id/menu2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_signUp"/>
+
+    <Button
+        android:id="@+id/btn_signUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0"
+        android:backgroundTint="@color/dark_blue"
+        android:text="@string/sign_up"
+        app:layout_constraintBottom_toBottomOf="@id/btn_signIn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/btn_signIn"
+        app:layout_constraintTop_toTopOf="@id/btn_signIn" />
+
 
     <ImageView
         android:id="@+id/imageView"
