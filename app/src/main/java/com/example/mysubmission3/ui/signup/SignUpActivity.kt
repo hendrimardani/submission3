@@ -5,16 +5,23 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.mysubmission3.R
 import com.example.mysubmission3.databinding.ActivitySignUpBinding
+import com.example.mysubmission3.ui.MainViewModel
+import com.example.mysubmission3.ui.ViewModelFactory
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
+    private val viewModel by viewModels<MainViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +34,12 @@ class SignUpActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        viewModel.isLoading().observe(this) { bool -> showLoading(bool) }
+        viewModel.message().observe(this) {
+            Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
+        }
+
         playAnimation()
         signUpButton()
 
@@ -34,11 +47,15 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun signUpButton() {
         binding.signupButton.setOnClickListener {
+            val name = binding.nameEditText.text.toString()
             val email = binding.emailEditText.text.toString()
+            val password = binding.passwordEditText.text.toString()
+
+            viewModel.isRegistered(token="", name=name, email=email, password=password)
 
             AlertDialog.Builder(this).apply {
-                setTitle("Yeah!")
-                setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan belajar coding.")
+                setTitle("Pendaftaran Akun Berhasil !")
+                setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan berbagi story dengan yang lain.")
                 setPositiveButton("Lanjut") { _, _ ->
                     finish()
                 }
@@ -46,6 +63,10 @@ class SignUpActivity : AppCompatActivity() {
                 show()
             }
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
     }
 
     private fun playAnimation() {

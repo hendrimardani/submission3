@@ -1,17 +1,15 @@
-package com.example.mysubmission3
+package com.example.mysubmission3.ui
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.mysubmission3.R
 import com.example.mysubmission3.databinding.ActivityMainBinding
 import com.example.mysubmission3.ui.login.LoginActivity
 import com.example.mysubmission3.ui.signup.SignUpActivity
