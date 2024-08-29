@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.mysubmission3.data.api.response.LoginResult
 import com.example.mysubmission3.data.api.response.RegisterResponse
 import com.example.mysubmission3.data.api.retrofit.ApiConfig
 import com.example.mysubmission3.data.api.retrofit.ApiService
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.math.log
 
 class UserRepository private constructor(
     private val apiService: ApiService,
@@ -22,6 +24,11 @@ class UserRepository private constructor(
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _loginResult = MutableLiveData<LoginResult>()
+    val loginResult: LiveData<LoginResult> = _loginResult
+
+
     suspend fun saveSession(userModel: UserModel) {
         userPreference.saveSession(userModel)
     }
@@ -47,6 +54,7 @@ class UserRepository private constructor(
         _isLoading.value = true
         val client = ApiConfig.getApiService(token).login(email, password)
         val loginResult = client.loginResult
+        _loginResult.value = loginResult as LoginResult
         _isLoading.value = false
         Log.d(TAG, loginResult.toString())
     }

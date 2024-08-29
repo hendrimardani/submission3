@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.mysubmission3.data.api.response.LoginResult
 import com.example.mysubmission3.datastore.user.UserModel
 import com.example.mysubmission3.datastore.user.UserRepository
 import kotlinx.coroutines.launch
@@ -26,6 +27,10 @@ class MainViewModel(private val userRepository: UserRepository): ViewModel() {
 
     fun message(): LiveData<String> {
         return userRepository.message
+    }
+
+    fun getLoginResult(): LiveData<LoginResult> {
+        return userRepository.loginResult
     }
 
     fun isRegistered(token: String, name: String, email: String, password: String) {
