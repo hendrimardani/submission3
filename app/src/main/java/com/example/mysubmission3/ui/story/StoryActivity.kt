@@ -29,12 +29,12 @@ class StoryActivity : AppCompatActivity() {
             insets
         }
 
-        val getToken = intent.getParcelableExtra<LoginResult>(EXTRA_TOKEN)
+        val getToken = intent.getParcelableExtra<LoginResult>(EXTRA_OBJECT)
         binding.tvTest.text = getToken.toString()
 
     }
 
     companion object {
-        const val EXTRA_TOKEN = "extra_token"
+        const val EXTRA_OBJECT = "extra_object"
     }
 }

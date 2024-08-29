@@ -19,7 +19,7 @@ import com.example.mysubmission3.databinding.ActivityLoginBinding
 import com.example.mysubmission3.ui.MainViewModel
 import com.example.mysubmission3.ui.ViewModelFactory
 import com.example.mysubmission3.ui.story.StoryActivity
-import com.example.mysubmission3.ui.story.StoryActivity.Companion.EXTRA_TOKEN
+import com.example.mysubmission3.ui.story.StoryActivity.Companion.EXTRA_OBJECT
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -56,7 +56,7 @@ class LoginActivity : AppCompatActivity() {
                 setPositiveButton("Lanjut") { _, _ ->
                     viewModel.getLoginResult().observe(this@LoginActivity) {
                         val intent = Intent(this@LoginActivity, StoryActivity::class.java)
-                        intent.putExtra(EXTRA_TOKEN, it)
+                        intent.putExtra(EXTRA_OBJECT, it)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intent)
                         Log.d(TAG, loginResult.toString())

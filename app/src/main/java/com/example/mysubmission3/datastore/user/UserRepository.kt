@@ -1,19 +1,12 @@
 package com.example.mysubmission3.datastore.user
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.mysubmission3.data.api.response.LoginResult
-import com.example.mysubmission3.data.api.response.RegisterResponse
 import com.example.mysubmission3.data.api.retrofit.ApiConfig
 import com.example.mysubmission3.data.api.retrofit.ApiService
 import kotlinx.coroutines.flow.Flow
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import kotlin.math.log
 
 class UserRepository private constructor(
     private val apiService: ApiService,
@@ -66,7 +59,10 @@ class UserRepository private constructor(
         private var instance: UserRepository? = null
         fun getInstance(apiService: ApiService, userPreference: UserPreference): UserRepository =
             instance ?: synchronized(this) {
-                instance ?: UserRepository(apiService, userPreference)
+                instance ?: UserRepository(
+                    apiService,
+                    userPreference
+                )
             }.also { instance = it }
     }
 }
