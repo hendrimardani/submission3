@@ -19,6 +19,7 @@ import com.example.mysubmission3.datastore.user.UserModel
 import com.example.mysubmission3.ui.MainViewModel
 import com.example.mysubmission3.ui.ViewModelFactory
 import com.example.mysubmission3.ui.story.StoryActivity
+import com.example.mysubmission3.ui.story.StoryActivity.Companion.EXTRA_ACTIVITY
 import com.example.mysubmission3.ui.story.StoryActivity.Companion.EXTRA_OBJECT
 
 class LoginActivity : AppCompatActivity() {
@@ -49,18 +50,19 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
             viewModel.login(token = "", email = email, password = password)
-            viewModel.saveSession(UserModel("123123", "test test", "sample_token"))
 
             AlertDialog.Builder(this).apply {
                 setTitle("Anda berhasil login.")
                 setMessage("Silahkan bagikan momen anda.")
                 setPositiveButton("Lanjut") { _, _ ->
                     viewModel.getLoginResult().observe(this@LoginActivity) {
+                        viewModel.saveSession(UserModel(it.userId.toString(), it.name.toString(), it.token.toString()))
                         val intent = Intent(this@LoginActivity, StoryActivity::class.java)
+                        intent.putExtra(EXTRA_ACTIVITY, TAG)
                         intent.putExtra(EXTRA_OBJECT, it)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intent)
-                        Log.d(TAG, it.toString())
+                        finish()
                     }
                 }
                 create()

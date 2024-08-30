@@ -21,7 +21,6 @@ class UserRepository private constructor(
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
-
     suspend fun saveSession(userModel: UserModel) {
         userPreference.saveSession(userModel)
     }
