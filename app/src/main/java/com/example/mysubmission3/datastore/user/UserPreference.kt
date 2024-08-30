@@ -3,9 +3,11 @@ package com.example.mysubmission3.datastore.user
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.mysubmission3.datastore.user.UserModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -15,18 +17,20 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
 
     suspend fun saveSession(user: UserModel) {
         dataStore.edit { preferences ->
-            preferences[USER_ID] = user.userId
-            preferences[NAME] = user.name
+            preferences[USER_ID_KEY] = user.userId
+            preferences[NAME_KEY] = user.name
             preferences[TOKEN_KEY] = user.token
+            preferences[IS_LOGIN_KEY] = true
         }
     }
 
-    fun getUser(): Flow<UserModel> {
+    fun getSession(): Flow<UserModel> {
         return dataStore.data.map { preferences ->
             UserModel(
-                preferences[USER_ID] ?: "",
-                preferences[NAME] ?: "",
-                preferences[TOKEN_KEY] ?: ""
+                preferences[USER_ID_KEY] ?: "",
+                preferences[NAME_KEY] ?: "",
+                preferences[TOKEN_KEY] ?: "",
+                preferences[IS_LOGIN_KEY] ?: false
             )
         }
     }
@@ -41,9 +45,10 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         @Volatile
         private var INSTANCE: UserPreference? = null
 
-        private val USER_ID = stringPreferencesKey("userId")
-        private val NAME = stringPreferencesKey("name")
+        private val USER_ID_KEY = stringPreferencesKey("userId")
+        private val NAME_KEY = stringPreferencesKey("name")
         private val TOKEN_KEY = stringPreferencesKey("token")
+        private val IS_LOGIN_KEY = booleanPreferencesKey("isLogin")
 
         fun getInstance(dataStore: DataStore<Preferences>): UserPreference {
             return INSTANCE ?: synchronized(this) {

@@ -27,7 +27,7 @@ class UserRepository private constructor(
     }
 
     fun getSession(): Flow<UserModel> {
-        return userPreference.getUser()
+        return userPreference.getSession()
     }
 
     suspend fun logout() {

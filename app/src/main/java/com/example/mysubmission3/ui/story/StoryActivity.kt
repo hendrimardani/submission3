@@ -1,5 +1,6 @@
 package com.example.mysubmission3.ui.story
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -9,8 +10,10 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.mysubmission3.R
 import com.example.mysubmission3.data.api.response.LoginResult
 import com.example.mysubmission3.databinding.ActivityStoryBinding
+import com.example.mysubmission3.ui.MainActivity
 import com.example.mysubmission3.ui.MainViewModel
 import com.example.mysubmission3.ui.ViewModelFactory
+import com.example.mysubmission3.ui.login.LoginActivity
 
 class StoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStoryBinding
@@ -31,7 +34,12 @@ class StoryActivity : AppCompatActivity() {
 
         val getToken = intent.getParcelableExtra<LoginResult>(EXTRA_OBJECT)
         binding.tvTest.text = getToken.toString()
-
+//        viewModel.getSession().observe(this) {
+//            if (!it.isLogin) {
+//                startActivity(Intent(this, MainActivity::class.java))
+//                finish()
+//            }
+//        }
     }
 
     companion object {

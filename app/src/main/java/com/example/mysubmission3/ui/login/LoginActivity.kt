@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -16,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.mysubmission3.R
 import com.example.mysubmission3.data.api.response.LoginResult
 import com.example.mysubmission3.databinding.ActivityLoginBinding
+import com.example.mysubmission3.datastore.user.UserModel
 import com.example.mysubmission3.ui.MainViewModel
 import com.example.mysubmission3.ui.ViewModelFactory
 import com.example.mysubmission3.ui.story.StoryActivity
@@ -49,6 +49,7 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
             viewModel.login(token = "", email = email, password = password)
+            viewModel.saveSession(UserModel("123123", "test test", "sample_token"))
 
             AlertDialog.Builder(this).apply {
                 setTitle("Anda berhasil login.")
@@ -59,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
                         intent.putExtra(EXTRA_OBJECT, it)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intent)
-                        Log.d(TAG, loginResult.toString())
+                        Log.d(TAG, it.toString())
                     }
                 }
                 create()

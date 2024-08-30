@@ -10,6 +10,11 @@ import com.example.mysubmission3.datastore.user.UserRepository
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val userRepository: UserRepository): ViewModel() {
+    fun saveSession(userModel: UserModel) {
+        viewModelScope.launch {
+            userRepository.saveSession(userModel)
+        }
+    }
 
     fun getSession(): LiveData<UserModel> {
         return userRepository.getSession().asLiveData()
@@ -42,12 +47,6 @@ class MainViewModel(private val userRepository: UserRepository): ViewModel() {
     fun login(token: String, email: String, password: String) {
         viewModelScope.launch {
             userRepository.login(token, email, password)
-        }
-    }
-
-    fun saveSession(userModel: UserModel) {
-        viewModelScope.launch {
-            userRepository.saveSession(userModel)
         }
     }
 }
