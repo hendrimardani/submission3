@@ -6,7 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import com.example.mysubmission3.data.api.response.LoginResult
 import com.example.mysubmission3.data.api.retrofit.ApiConfig
 import com.example.mysubmission3.data.api.retrofit.ApiService
+import com.example.mysubmission3.ui.login.LoginActivity.Companion.ERROR_RESPONSE
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import retrofit2.HttpException
 
 class UserRepository private constructor(
     private val apiService: ApiService,
@@ -43,12 +46,15 @@ class UserRepository private constructor(
     }
 
     suspend fun login(token: String, email: String, password: String) {
-        _isLoading.value = true
-        val client = ApiConfig.getApiService(token).login(email, password)
-        val loginResult = client.loginResult
-        _loginResult.value = loginResult as LoginResult
-        _isLoading.value = false
-        Log.d(TAG, loginResult.toString())
+        try {
+            _isLoading.value = true
+            val client = ApiConfig.getApiService(token).login(email, password)
+            val loginResult = client.loginResult
+            _loginResult.value = loginResult as LoginResult
+            Log.d(TAG, loginResult.toString())
+        } catch (e: HttpException) {
+            ERROR_RESPONSE = true
+        }
     }
 
     companion object {

@@ -6,28 +6,32 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.mysubmission3.R
 import com.example.mysubmission3.data.api.response.LoginResult
 import com.example.mysubmission3.databinding.ActivityLoginBinding
 import com.example.mysubmission3.datastore.user.UserModel
 import com.example.mysubmission3.ui.MainViewModel
 import com.example.mysubmission3.ui.ViewModelFactory
+import com.example.mysubmission3.ui.signup.SignUpActivity
 import com.example.mysubmission3.ui.story.StoryActivity
 import com.example.mysubmission3.ui.story.StoryActivity.Companion.EXTRA_ACTIVITY
 import com.example.mysubmission3.ui.story.StoryActivity.Companion.EXTRA_OBJECT
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this)
     }
-    private var loginResult: LoginResult? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,22 +55,37 @@ class LoginActivity : AppCompatActivity() {
             val password = binding.passwordEditText.text.toString()
             viewModel.login(token = "", email = email, password = password)
 
-            AlertDialog.Builder(this).apply {
-                setTitle("Anda berhasil login.")
-                setMessage("Silahkan bagikan momen anda.")
-                setPositiveButton("Lanjut") { _, _ ->
-                    viewModel.getLoginResult().observe(this@LoginActivity) {
-                        viewModel.saveSession(UserModel(it.userId.toString(), it.name.toString(), it.token.toString()))
-                        val intent = Intent(this@LoginActivity, StoryActivity::class.java)
-                        intent.putExtra(EXTRA_ACTIVITY, TAG)
-                        intent.putExtra(EXTRA_OBJECT, it)
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                        startActivity(intent)
-                        finish()
+            lifecycleScope.launch {
+                delay(2000)
+                if (!ERROR_RESPONSE) {
+                    AlertDialog.Builder(this@LoginActivity).apply {
+                        setTitle("Anda berhasil login.")
+                        setMessage("Silahkan bagikan momen anda.")
+                        setPositiveButton("Lanjut") { _, _ ->
+                            viewModel.getLoginResult().observe(this@LoginActivity) {
+                                viewModel.saveSession(UserModel(it.userId.toString(), it.name.toString(), it.token.toString()))
+                                val intent = Intent(this@LoginActivity, StoryActivity::class.java)
+                                intent.putExtra(EXTRA_ACTIVITY, TAG)
+                                intent.putExtra(EXTRA_OBJECT, it)
+                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                startActivity(intent)
+                            }
+                        }
+                        create()
+                        show()
                     }
+                } else {
+                    AlertDialog.Builder(this@LoginActivity).apply {
+                        setTitle("Akun anda belum terdaftar.")
+                        setMessage("Silahkan buat akun terlebih dahulu.")
+                        setPositiveButton("Lanjut Daftar Akun") { _, _ ->
+                            startActivity(Intent(this@LoginActivity, SignUpActivity::class.java))
+                        }
+                        create()
+                        show()
+                    }
+                    ERROR_RESPONSE = false
                 }
-                create()
-                show()
             }
         }
     }
@@ -98,5 +117,6 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
         private val TAG = LoginActivity::class.java.simpleName
+        var ERROR_RESPONSE = false
     }
 }
