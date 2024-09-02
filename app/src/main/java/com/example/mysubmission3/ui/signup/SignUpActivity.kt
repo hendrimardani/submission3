@@ -3,19 +3,25 @@ package com.example.mysubmission3.ui.signup
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.mysubmission3.R
 import com.example.mysubmission3.databinding.ActivitySignUpBinding
 import com.example.mysubmission3.ui.MainViewModel
 import com.example.mysubmission3.ui.ViewModelFactory
+import com.example.mysubmission3.ui.login.LoginActivity
+import com.example.mysubmission3.ui.login.LoginActivity.Companion.EXTRA_BACK_DATA
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
@@ -43,6 +49,14 @@ class SignUpActivity : AppCompatActivity() {
         playAnimation()
         signUpButton()
 
+        onBackPressedDispatcher.addCallback(this) {
+            showLoading(false)
+            val intent = Intent(this@SignUpActivity, LoginActivity::class.java)
+            intent.putExtra(EXTRA_BACK_DATA, 1)
+            startActivity(intent)
+            finish()
+        }
+
     }
 
     private fun signUpButton() {
@@ -51,16 +65,22 @@ class SignUpActivity : AppCompatActivity() {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
 
-            viewModel.isRegistered(token="", name=name, email=email, password=password)
-
-            AlertDialog.Builder(this).apply {
-                setTitle("Pendaftaran Akun Berhasil !")
-                setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan berbagi story dengan yang lain.")
-                setPositiveButton("Lanjut") { _, _ ->
-                    finish()
+            if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("Daftar Akun Gagal !")
+                    .setContentText("Tidak boleh ada data yang kosong.")
+                    .show()
+            } else {
+                viewModel.isRegistered(token="", name=name, email=email, password=password)
+                AlertDialog.Builder(this).apply {
+                    setTitle("Pendaftaran Akun Berhasil !")
+                    setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan berbagi story dengan yang lain.")
+                    setPositiveButton("Lanjut") { _, _ ->
+                        finish()
+                    }
+                    create()
+                    show()
                 }
-                create()
-                show()
             }
         }
     }

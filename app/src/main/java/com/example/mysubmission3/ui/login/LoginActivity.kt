@@ -4,20 +4,24 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.mysubmission3.R
-import com.example.mysubmission3.data.api.response.LoginResult
 import com.example.mysubmission3.databinding.ActivityLoginBinding
 import com.example.mysubmission3.datastore.user.UserModel
+import com.example.mysubmission3.ui.MainActivity
 import com.example.mysubmission3.ui.MainViewModel
 import com.example.mysubmission3.ui.ViewModelFactory
 import com.example.mysubmission3.ui.signup.SignUpActivity
@@ -26,6 +30,7 @@ import com.example.mysubmission3.ui.story.StoryActivity.Companion.EXTRA_ACTIVITY
 import com.example.mysubmission3.ui.story.StoryActivity.Companion.EXTRA_OBJECT
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -45,53 +50,91 @@ class LoginActivity : AppCompatActivity() {
         }
         viewModel.isLoading().observe(this) { bool -> showLoading(bool) }
 
+        if (intent.getIntExtra(EXTRA_BACK_DATA, 0) == 1) {
+            viewModel.isLoading().observe(this) { bool -> showLoading(false) }
+        }
+
+        onBackPressedDispatcher.addCallback(this) {
+            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+        }
+
         playAnimation()
         loginButton()
+        validationPassword()
+    }
+
+    private fun validationPassword() {
+        binding.passwordEditText.addTextChangedListener { object: TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+              setMyButtonEnable()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        } }
+    }
+
+    private fun setMyButtonEnable() {
+        val result = binding.passwordEditText.text
+        binding.loginButton.isEnabled = result != null && result.isNotEmpty()
     }
 
     private fun loginButton() {
         binding.loginButton.setOnClickListener {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
-            viewModel.login(token = "", email = email, password = password)
 
-            lifecycleScope.launch {
-                delay(2000)
-                if (!ERROR_RESPONSE) {
-                    AlertDialog.Builder(this@LoginActivity).apply {
-                        setTitle("Anda berhasil login.")
-                        setMessage("Silahkan bagikan momen anda.")
-                        setPositiveButton("Lanjut") { _, _ ->
-                            viewModel.getLoginResult().observe(this@LoginActivity) {
-                                viewModel.saveSession(UserModel(it.userId.toString(), it.name.toString(), it.token.toString()))
-                                val intent = Intent(this@LoginActivity, StoryActivity::class.java)
-                                intent.putExtra(EXTRA_ACTIVITY, TAG)
-                                intent.putExtra(EXTRA_OBJECT, it)
-                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                startActivity(intent)
+            if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
+                SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("Login Gagal !")
+                    .setContentText("Tidak boleh ada data yang kosong.")
+                    .show()
+            } else {
+                viewModel.login(token = "", email = email, password = password)
+                lifecycleScope.launch {
+                    delay(5000)
+                    if (!ERROR_RESPONSE) {
+                        AlertDialog.Builder(this@LoginActivity).apply {
+                            setTitle("Anda berhasil login.")
+                            setMessage("Silahkan bagikan momen anda.")
+                            setPositiveButton("Lanjut") { _, _ ->
+                                viewModel.getLoginResult().observe(this@LoginActivity) {
+                                    viewModel.saveSession(UserModel(it.userId.toString(), it.name.toString(), it.token.toString()))
+                                    Log.d(TAG, "onLoginSucces: ${it.name}")
+                                    val intent = Intent(this@LoginActivity, StoryActivity::class.java)
+                                    intent.putExtra(EXTRA_ACTIVITY, TAG)
+                                    intent.putExtra(EXTRA_OBJECT, it)
+                                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                    startActivity(intent)
+                                }
                             }
+                            setCancelable(false)
+                            create()
+                            show()
                         }
-                        create()
-                        show()
-                    }
-                } else {
-                    AlertDialog.Builder(this@LoginActivity).apply {
-                        setTitle("Akun anda belum terdaftar.")
-                        setMessage("Silahkan buat akun terlebih dahulu.")
-                        setPositiveButton("Lanjut Daftar Akun") { _, _ ->
-                            startActivity(Intent(this@LoginActivity, SignUpActivity::class.java))
+                    } else {
+                        AlertDialog.Builder(this@LoginActivity).apply {
+                            setTitle("Akun anda belum terdaftar.")
+                            setMessage("Silahkan buat akun terlebih dahulu.")
+                            setPositiveButton("Lanjut Daftar Akun") { _, _ ->
+                                startActivity(Intent(this@LoginActivity, SignUpActivity::class.java))
+                            }
+                            setCancelable(false)
+                            create()
+                            show()
                         }
-                        create()
-                        show()
+                        ERROR_RESPONSE = false
                     }
-                    ERROR_RESPONSE = false
                 }
             }
         }
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
     }
 
     private fun playAnimation() {
@@ -118,5 +161,6 @@ class LoginActivity : AppCompatActivity() {
     companion object {
         private val TAG = LoginActivity::class.java.simpleName
         var ERROR_RESPONSE = false
+        const val EXTRA_BACK_DATA = "extra_back_data"
     }
 }

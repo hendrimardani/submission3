@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.glide)
     implementation(libs.androidx.work.runtime)
+    implementation(libs.android.com.github.f0ris.sweetalert.library)
 
     // testing
     testImplementation(libs.junit)

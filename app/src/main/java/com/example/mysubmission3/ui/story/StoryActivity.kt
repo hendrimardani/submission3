@@ -39,6 +39,7 @@ class StoryActivity : AppCompatActivity() {
 
     private fun btnLogout() {
         binding.btnLogout.setOnClickListener {
+            UserModel(userId = "", name = "", token = "", isLogin = false)
             viewModel.logout()
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK

@@ -51,6 +51,7 @@ class UserRepository private constructor(
             val client = ApiConfig.getApiService(token).login(email, password)
             val loginResult = client.loginResult
             _loginResult.value = loginResult as LoginResult
+            _isLoading.value = false
             Log.d(TAG, loginResult.toString())
         } catch (e: HttpException) {
             ERROR_RESPONSE = true

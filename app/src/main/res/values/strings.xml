@@ -22,4 +22,6 @@
     <string name="name">Nama</string>
     <string name="message_main_page">Selamat Belajar di Dicoding.</string>
     <string name="logout">Keluar</string>
+    <string name="email_hint">Masukkan email anda</string>
+    <string name="name_hint">Masukkan nama anda</string>
 </resources>
