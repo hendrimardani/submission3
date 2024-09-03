@@ -2,15 +2,12 @@ package com.example.mysubmission3.ui.story
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -25,11 +22,10 @@ import com.example.mysubmission3.datastore.user.UserModel
 import com.example.mysubmission3.ui.MainActivity
 import com.example.mysubmission3.ui.MainViewModel
 import com.example.mysubmission3.ui.ViewModelFactory
-import com.example.mysubmission3.ui.detail_story.DetailActivity
-import com.example.mysubmission3.ui.detail_story.DetailActivity.Companion.EXTRA_ID
-import com.example.mysubmission3.ui.detail_story.DetailActivity.Companion.EXTRA_TOKEN
-import com.example.mysubmission3.ui.login.LoginActivity
-import com.example.mysubmission3.ui.signup.SignUpActivity
+import com.example.mysubmission3.ui.add.AddActivity
+import com.example.mysubmission3.ui.detail.DetailActivity
+import com.example.mysubmission3.ui.detail.DetailActivity.Companion.EXTRA_ID
+import com.example.mysubmission3.ui.detail.DetailActivity.Companion.EXTRA_TOKEN
 
 class StoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStoryBinding
@@ -50,6 +46,10 @@ class StoryActivity : AppCompatActivity() {
         viewModel.isLoading().observe(this) { bool -> showLoading(bool) }
         getDataExtra()
         backButtonCallback()
+
+        binding.fabAdd.setOnClickListener {
+            startActivity(Intent(this, AddActivity::class.java))
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

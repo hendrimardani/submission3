@@ -5,14 +5,14 @@
     android:id="@+id/detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.detail_story.DetailActivity">
+    tools:context=".ui.detail.DetailActivity">
 
     <ImageView
         android:id="@+id/iv_detail"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:src="@drawable/gambar_no_image"
-        android:contentDescription="@string/image_detail"
+        android:contentDescription="@string/image"
         android:layout_marginHorizontal="@dimen/margin_horizontal"
         android:layout_marginTop="@dimen/margin_top_bottom"
         app:layout_constraintStart_toStartOf="parent"

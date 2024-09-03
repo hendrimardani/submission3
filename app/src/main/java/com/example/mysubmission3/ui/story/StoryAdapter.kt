@@ -46,7 +46,6 @@ class StoryAdapter(val context: Context) : ListAdapter<ListStoryItem, StoryAdapt
             override fun areContentsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
                 return oldItem == newItem
             }
-
         }
     }
 

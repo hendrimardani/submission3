@@ -1,4 +1,4 @@
-package com.example.mysubmission3.ui.detail_story
+package com.example.mysubmission3.ui.detail
 
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +11,6 @@ import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.example.mysubmission3.R
 import com.example.mysubmission3.databinding.ActivityDetailBinding
-import com.example.mysubmission3.databinding.ActivityStoryBinding
 import com.example.mysubmission3.ui.MainViewModel
 import com.example.mysubmission3.ui.ViewModelFactory
 

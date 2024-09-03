@@ -25,10 +25,13 @@
     <string name="email_hint">Masukkan email anda</string>
     <string name="name_hint">Masukkan nama anda</string>
     <string name="item_image">Item List Image\n</string>
-    <string name="image_detail">Image Detail\n</string>
+    <string name="image">Image\n</string>
     <string name="description">Description</string>
     <string name="id_user">Id</string>
     <string name="description_detail">Description</string>
     <string name="name">Nama</string>
     <string name="createdAt">Created at %1$s</string>
+    <string name="camera">Kamera</string>
+    <string name="gallery">Galeri</string>
+    <string name="upload">Unggah</string>
 </resources>
