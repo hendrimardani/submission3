@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.mysubmission3.data.api.response.ListStoryItem
 import com.example.mysubmission3.data.api.response.LoginResult
+import com.example.mysubmission3.data.api.response.Story
 import com.example.mysubmission3.datastore.user.UserModel
 import com.example.mysubmission3.datastore.user.UserRepository
 import kotlinx.coroutines.delay
@@ -50,5 +52,25 @@ class MainViewModel(private val userRepository: UserRepository): ViewModel() {
         viewModelScope.launch {
             userRepository.login(token, email, password)
         }
+    }
+
+    fun getListStoryItem(): LiveData<List<ListStoryItem>> {
+        return userRepository.getListStoryItem
+    }
+
+    fun getAllStoryItem(token: String) {
+        viewModelScope.launch {
+            userRepository.getAllStories(token)
+        }
+    }
+
+    fun detailStory(token: String, id: String) {
+        viewModelScope.launch {
+            userRepository.detailStory(token, id)
+        }
+    }
+
+    fun getDetailStory(): LiveData<Story> {
+        return userRepository.story
     }
 }

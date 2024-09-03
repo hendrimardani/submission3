@@ -54,13 +54,16 @@ class LoginActivity : AppCompatActivity() {
             viewModel.isLoading().observe(this) { bool -> showLoading(false) }
         }
 
-        onBackPressedDispatcher.addCallback(this) {
-            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-        }
-
+        backButtonCallback()
         playAnimation()
         loginButton()
         validationPassword()
+    }
+
+    private fun backButtonCallback() {
+        onBackPressedDispatcher.addCallback(this) {
+            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+        }
     }
 
     private fun validationPassword() {

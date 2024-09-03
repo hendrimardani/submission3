@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MySubmission3</string>
+    <string name="app_name">Dicoding Story App</string>
     <string name="title_menu_1">Selamat datang di Dicoding Story App! Bagikan kisahmu sekarang.</string>
     <string name="title_menu_2">Dicoding Story App: Duniamu dalam cerita.</string>
     <string name="title_menu_3">Bagikan pengalaman anda sepanjang masa !</string>
@@ -19,9 +19,16 @@
     <string name="password">Password</string>
     <string name="message_login_page">Masukkan dulu datamu ya</string>
     <string name="title_login_page">Sudah siap untuk berbagi cerita?</string>
-    <string name="name">Nama</string>
+    <string name="name_detail">Nama</string>
     <string name="message_main_page">Selamat Belajar di Dicoding.</string>
     <string name="logout">Keluar</string>
     <string name="email_hint">Masukkan email anda</string>
     <string name="name_hint">Masukkan nama anda</string>
+    <string name="item_image">Item List Image\n</string>
+    <string name="image_detail">Image Detail\n</string>
+    <string name="description">Description</string>
+    <string name="id_user">Id</string>
+    <string name="description_detail">Description</string>
+    <string name="name">Nama</string>
+    <string name="createdAt">Created at %1$s</string>
 </resources>

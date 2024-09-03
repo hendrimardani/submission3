@@ -15,6 +15,9 @@
         android:theme="@style/Theme.MySubmission3"
         tools:targetApi="31">
         <activity
+            android:name=".ui.detail_story.DetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.story.StoryActivity"
             android:exported="false" />
         <activity

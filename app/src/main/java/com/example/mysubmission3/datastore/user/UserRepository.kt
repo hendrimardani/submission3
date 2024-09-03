@@ -3,7 +3,10 @@ package com.example.mysubmission3.datastore.user
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
+import com.example.mysubmission3.data.api.response.ListStoryItem
 import com.example.mysubmission3.data.api.response.LoginResult
+import com.example.mysubmission3.data.api.response.Story
 import com.example.mysubmission3.data.api.retrofit.ApiConfig
 import com.example.mysubmission3.data.api.retrofit.ApiService
 import com.example.mysubmission3.ui.login.LoginActivity.Companion.ERROR_RESPONSE
@@ -15,6 +18,12 @@ class UserRepository private constructor(
     private val apiService: ApiService,
     private val userPreference: UserPreference
 ) {
+    private var _story = MutableLiveData<Story>()
+    val story: LiveData<Story> = _story
+
+    private var _getListStoryItem = MutableLiveData<List<ListStoryItem>>()
+    val getListStoryItem: LiveData<List<ListStoryItem>> = _getListStoryItem
+
     private val _message = MutableLiveData<String>()
     val message: LiveData<String> = _message
 
@@ -42,7 +51,7 @@ class UserRepository private constructor(
         val message = client.message
         _message.value = message as String
         _isLoading.value = false
-        Log.d(TAG, message.toString())
+        Log.d(TAG, "onIsRegisteredUser : ${_message.value}")
     }
 
     suspend fun login(token: String, email: String, password: String) {
@@ -52,10 +61,26 @@ class UserRepository private constructor(
             val loginResult = client.loginResult
             _loginResult.value = loginResult as LoginResult
             _isLoading.value = false
-            Log.d(TAG, loginResult.toString())
+            Log.d(TAG, "onLoginResult : ${_loginResult.value}")
         } catch (e: HttpException) {
             ERROR_RESPONSE = true
         }
+    }
+
+    suspend fun getAllStories(token: String){
+        _isLoading.value = true
+        val client = ApiConfig.getApiService(token).getAllStories()
+        _getListStoryItem.value = client.listStory as List<ListStoryItem>
+        _isLoading.value = false
+        Log.d(TAG, "onGetListStoryItem : ${_getListStoryItem.value}")
+    }
+
+    suspend fun detailStory(token: String, id: String) {
+        _isLoading.value = true
+        val client = ApiConfig.getApiService(token).detailStory(id)
+        _story.value = client.story as Story
+        _isLoading.value = false
+        Log.d(TAG, "onDetailStory : ${_story.value}")
     }
 
     companion object {

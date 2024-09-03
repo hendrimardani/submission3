@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG, "Nama anda: ${it.name}")
             if (it.isLogin) {
                 val intent = Intent(this@MainActivity, StoryActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                 intent.putExtra(EXTRA_ACTIVITY, TAG)
                 intent.putExtra(EXTRA_OBJECT, it)
                 startActivity(intent)
