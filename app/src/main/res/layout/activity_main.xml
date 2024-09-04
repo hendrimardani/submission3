@@ -230,7 +230,7 @@
         android:layout_marginBottom="32dp"
         android:alpha="0"
         android:backgroundTint="@color/dark_blue"
-        android:text="@string/sign_in"
+        android:text="@string/login"
         app:layout_constraintBottom_toTopOf="@+id/menu2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_signUp"/>
@@ -241,7 +241,7 @@
         android:layout_height="wrap_content"
         android:alpha="0"
         android:backgroundTint="@color/dark_blue"
-        android:text="@string/sign_up"
+        android:text="@string/signup"
         app:layout_constraintBottom_toBottomOf="@id/btn_signIn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_signIn"

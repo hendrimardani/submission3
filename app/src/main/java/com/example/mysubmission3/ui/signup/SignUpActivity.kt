@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.example.mysubmission3.MyPasswordEditText.Companion.PASSWORD_LENGTH_LIMIT
 import com.example.mysubmission3.R
 import com.example.mysubmission3.databinding.ActivitySignUpBinding
 import com.example.mysubmission3.ui.MainViewModel
@@ -65,15 +66,20 @@ class SignUpActivity : AppCompatActivity() {
 
             if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-                    .setTitleText("Daftar Akun Gagal !")
-                    .setContentText("Tidak boleh ada data yang kosong.")
+                    .setTitleText(getString(R.string.error_title_login_dialog))
+                    .setContentText(getString(R.string.error_description_login_dialog))
+                    .show()
+            } else if (password.length < PASSWORD_LENGTH_LIMIT) {
+                SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText(getString(R.string.error_title_login_dialog))
+                    .setContentText(getString(R.string.error_description_password_login_dialog))
                     .show()
             } else {
                 viewModel.isRegistered(token="", name=name, email=email, password=password)
                 AlertDialog.Builder(this).apply {
-                    setTitle("Pendaftaran Akun Berhasil !")
-                    setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan berbagi story dengan yang lain.")
-                    setPositiveButton("Lanjut") { _, _ ->
+                    setTitle(getString(R.string.registration_success_title_dialog))
+                    setMessage(getString(R.string.registration_success_description_dialog, email))
+                    setPositiveButton(getString(R.string.registration_text_dialog)) { _, _ ->
                         finish()
                     }
                     create()

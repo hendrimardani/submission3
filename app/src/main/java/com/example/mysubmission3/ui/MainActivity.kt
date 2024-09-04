@@ -46,14 +46,14 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, LoginActivity::class.java))
         }
 
-        viewModel.getSession().observe(this) {
-            Log.d(TAG, "Apakah sudah login?: ${it.isLogin}")
-            Log.d(TAG, "Nama anda: ${it.name}")
-            if (it.isLogin) {
+        viewModel.getSession().observe(this) { userModel ->
+            Log.d(TAG, "Apakah sudah login?: ${userModel.isLogin}")
+            Log.d(TAG, "Nama anda: ${userModel.name}")
+            if (userModel.isLogin) {
                 val intent = Intent(this@MainActivity, StoryActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                 intent.putExtra(EXTRA_ACTIVITY, TAG)
-                intent.putExtra(EXTRA_OBJECT, it)
+                intent.putExtra(EXTRA_OBJECT, userModel)
                 startActivity(intent)
             }
         }

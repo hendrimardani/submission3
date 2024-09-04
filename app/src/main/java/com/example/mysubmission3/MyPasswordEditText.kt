@@ -15,10 +15,10 @@ class MyPasswordEditText @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : AppCompatEditText(context, attrs), View.OnTouchListener {
 
-    private var clearButtonImage: Drawable
+    private var showImage: Drawable
 
     init {
-        clearButtonImage = ContextCompat.getDrawable(context, R.drawable.ic_error_24px) as Drawable
+        showImage = ContextCompat.getDrawable(context, R.drawable.ic_error_24px) as Drawable
         setOnTouchListener(this)
 
         addTextChangedListener(object : TextWatcher {
@@ -26,7 +26,7 @@ class MyPasswordEditText @JvmOverloads constructor(
                 // Do nothing.
             }
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.length < 8) setError("Password tidak boleh kurang dari 8 karakter")
+                if (s.length < PASSWORD_LENGTH_LIMIT) setError("Password tidak boleh kurang dari 8 karakter")
             }
             override fun afterTextChanged(s: Editable) {
                 // Do nothing.
@@ -36,33 +36,33 @@ class MyPasswordEditText @JvmOverloads constructor(
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         if (compoundDrawables[2] != null) {
-            val clearButtonStart: Float
-            val clearButtonEnd: Float
+            val imageStart: Float
+            val imageEnd: Float
             var isClearButtonClicked = false
             if (layoutDirection == View.LAYOUT_DIRECTION_RTL) {
-                clearButtonEnd = (clearButtonImage.intrinsicWidth + paddingStart).toFloat()
+                imageEnd = (showImage.intrinsicWidth + paddingStart).toFloat()
                 when {
-                    event!!.x < clearButtonEnd -> isClearButtonClicked = true
+                    event!!.x < imageEnd -> isClearButtonClicked = true
                 }
             } else {
-                clearButtonStart = (width - paddingEnd - clearButtonImage.intrinsicWidth).toFloat()
+                imageStart = (width - paddingEnd - showImage.intrinsicWidth).toFloat()
                 when {
-                    event!!.x > clearButtonStart -> isClearButtonClicked = true
+                    event!!.x > imageStart -> isClearButtonClicked = true
                 }
             }
             if (isClearButtonClicked) {
                 when (event!!.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        clearButtonImage = ContextCompat.getDrawable(context, R.drawable.ic_error_24px) as Drawable
-                        showClearButton()
+                        showImage = ContextCompat.getDrawable(context, R.drawable.ic_error_24px) as Drawable
+                        showError()
                         return true
                     }
                     MotionEvent.ACTION_UP -> {
-                        clearButtonImage = ContextCompat.getDrawable(context, R.drawable.ic_error_24px) as Drawable
+                        showImage = ContextCompat.getDrawable(context, R.drawable.ic_error_24px) as Drawable
                         when {
                             text != null -> text?.clear()
                         }
-                        hideClearButton()
+                        hideError()
                         return true
                     }
                     else -> return false
@@ -78,11 +78,11 @@ class MyPasswordEditText @JvmOverloads constructor(
         textAlignment = View.TEXT_ALIGNMENT_TEXT_START
     }
 
-    private fun showClearButton() {
-        setButtonDrawables(endOfTheText = clearButtonImage)
+    private fun showError() {
+        setButtonDrawables(endOfTheText = showImage)
     }
 
-    private fun hideClearButton() {
+    private fun hideError() {
         setButtonDrawables()
     }
 
@@ -98,6 +98,10 @@ class MyPasswordEditText @JvmOverloads constructor(
             endOfTheText,
             bottomOfTheText
         )
+    }
+
+    companion object {
+        const val PASSWORD_LENGTH_LIMIT = 8
     }
 
 }

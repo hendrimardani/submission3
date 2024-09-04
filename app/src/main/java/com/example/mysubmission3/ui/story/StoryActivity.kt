@@ -2,6 +2,7 @@ package com.example.mysubmission3.ui.story
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -59,11 +60,15 @@ class StoryActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_logout -> {
-                logoutUser()
-            }
+            R.id.menu_logout -> logoutUser()
+            R.id.menu_change_language -> changeLanguage()
+
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun changeLanguage() {
+        startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
     }
 
     private fun backButtonCallback() {
@@ -102,9 +107,9 @@ class StoryActivity : AppCompatActivity() {
     }
 
     private fun logoutUser() {
-        SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
-            .setTitleText("Ingin keluar akun ?")
-            .setConfirmButton("Ya") {
+        SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+            .setTitleText(getString(R.string.title_logout_account_dialog))
+            .setConfirmButton(getString(R.string.yes_logout_account_dialog)) {
                 UserModel(userId = "", name = "", token = "", isLogin = false)
                 viewModel.logout()
                 val intent = Intent(this@StoryActivity, MainActivity::class.java)
@@ -119,6 +124,10 @@ class StoryActivity : AppCompatActivity() {
         if (getActivityData == "LoginActivity") {
             val getLoginResultData = intent.getParcelableExtra<LoginResult>(EXTRA_OBJECT)
             val getTokenData = getLoginResultData!!.token as String
+            setupRecyclerViewItem(getTokenData)
+        } else if (getActivityData == "AddActivity") {
+            val getUserModelData = intent.getParcelableExtra<UserModel>(EXTRA_OBJECT)
+            val getTokenData = getUserModelData!!.token
             setupRecyclerViewItem(getTokenData)
         } else {
             val getUserModelData = intent.getParcelableExtra<UserModel>(EXTRA_OBJECT)

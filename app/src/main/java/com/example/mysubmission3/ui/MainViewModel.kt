@@ -12,6 +12,7 @@ import com.example.mysubmission3.datastore.user.UserModel
 import com.example.mysubmission3.datastore.user.UserRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
 
 class MainViewModel(private val userRepository: UserRepository): ViewModel() {
     fun saveSession(userModel: UserModel) {
@@ -73,4 +74,6 @@ class MainViewModel(private val userRepository: UserRepository): ViewModel() {
     fun getDetailStory(): LiveData<Story> {
         return userRepository.story
     }
+
+    fun uploadImage(file: File, description: String) = userRepository.uploadImage(file, description)
 }

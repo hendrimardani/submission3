@@ -90,8 +90,8 @@ class UserRepository private constructor(
         Log.d(TAG, "onDetailStory : ${_story.value}")
     }
 
-    fun addNewStory(imageFile: File, description: String) = liveData {
-        emit(ResultState.Loading)
+    fun uploadImage(imageFile: File, description: String) = liveData {
+        _isLoading.value = true
         val requestBody = description.toRequestBody("text/plain".toMediaType())
         val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
         val multipartBody = MultipartBody.Part.createFormData(
@@ -102,10 +102,12 @@ class UserRepository private constructor(
         try {
             val successResponse = apiService.uploadImage(multipartBody, requestBody)
             emit(ResultState.Success(successResponse))
+            _isLoading.value = false
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, AddNewStoryResponse::class.java)
             emit(ResultState.Error(errorResponse.message as String))
+            _isLoading.value = false
         }
     }
 

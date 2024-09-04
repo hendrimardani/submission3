@@ -5,5 +5,9 @@
     <dimen name="margin_top_bottom">5dp</dimen>
     <dimen name="cardview_elevation">5dp</dimen>
     <dimen name="padding_item_list">10dp</dimen>
+    <dimen name="padding_dialog_custome_for_success_result">20dp</dimen>
     <dimen name="title_size">16sp</dimen>
+    <dimen name="text_size_title_dialog_custome">16sp</dimen>
+    <dimen name="text_size_description_dialog_custome">12sp</dimen>
+    <dimen name="text_size_ok_dialog_custome">25sp</dimen>
 </resources>

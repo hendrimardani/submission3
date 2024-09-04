@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.example.mysubmission3.MyPasswordEditText.Companion.PASSWORD_LENGTH_LIMIT
 import com.example.mysubmission3.R
 import com.example.mysubmission3.databinding.ActivityLoginBinding
 import com.example.mysubmission3.datastore.user.UserModel
@@ -92,8 +93,13 @@ class LoginActivity : AppCompatActivity() {
 
             if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
                 SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-                    .setTitleText("Login Gagal !")
-                    .setContentText("Tidak boleh ada data yang kosong.")
+                    .setTitleText(getString(R.string.error_title_login_dialog))
+                    .setContentText(getString(R.string.error_description_login_dialog))
+                    .show()
+            } else if (password.length < PASSWORD_LENGTH_LIMIT) {
+                SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText(getString(R.string.error_title_login_dialog))
+                    .setContentText(getString(R.string.error_description_password_login_dialog))
                     .show()
             } else {
                 viewModel.login(token = "", email = email, password = password)
@@ -101,15 +107,15 @@ class LoginActivity : AppCompatActivity() {
                     delay(5000)
                     if (!ERROR_RESPONSE) {
                         AlertDialog.Builder(this@LoginActivity).apply {
-                            setTitle("Anda berhasil login.")
-                            setMessage("Silahkan bagikan momen anda.")
+                            setTitle(getString(R.string.success_title_login_dialog))
+                            setMessage(getString(R.string.success_description_momen_login_dialog))
                             setPositiveButton("Lanjut") { _, _ ->
-                                viewModel.getLoginResult().observe(this@LoginActivity) {
-                                    viewModel.saveSession(UserModel(it.userId.toString(), it.name.toString(), it.token.toString()))
-                                    Log.d(TAG, "onLoginSucces: ${it.name}")
+                                viewModel.getLoginResult().observe(this@LoginActivity) { loginResult ->
+                                    viewModel.saveSession(UserModel(loginResult.userId.toString(), loginResult.name.toString(), loginResult.token.toString()))
+                                    Log.d(TAG, "onLoginSucces: ${loginResult.name}")
                                     val intent = Intent(this@LoginActivity, StoryActivity::class.java)
                                     intent.putExtra(EXTRA_ACTIVITY, TAG)
-                                    intent.putExtra(EXTRA_OBJECT, it)
+                                    intent.putExtra(EXTRA_OBJECT, loginResult)
                                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                                     startActivity(intent)
                                 }
@@ -120,9 +126,9 @@ class LoginActivity : AppCompatActivity() {
                         }
                     } else {
                         AlertDialog.Builder(this@LoginActivity).apply {
-                            setTitle("Akun anda belum terdaftar.")
-                            setMessage("Silahkan buat akun terlebih dahulu.")
-                            setPositiveButton("Lanjut Daftar Akun") { _, _ ->
+                            setTitle(getString(R.string.error_title_signup_account_login_dialog))
+                            setMessage(getString(R.string.error_description_signup_account_login_dialog))
+                            setPositiveButton(getString(R.string.next_signup_account)) { _, _ ->
                                 startActivity(Intent(this@LoginActivity, SignUpActivity::class.java))
                             }
                             setCancelable(false)
