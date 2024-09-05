@@ -104,7 +104,7 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 viewModel.login(token = "", email = email, password = password)
                 lifecycleScope.launch {
-                    delay(5000)
+                    delay(9000)
                     if (!ERROR_RESPONSE) {
                         AlertDialog.Builder(this@LoginActivity).apply {
                             setTitle(getString(R.string.success_title_login_dialog))

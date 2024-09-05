@@ -36,20 +36,20 @@
     <string name="title_dialog_custome">Data Successfully Added</string>
     <string name="description_dialog_custome">Please check your story page.</string>
     <string name="change_language">Change Language</string>
-
-    <string name="error_title_login_dialog">Login Gagal</string>
-    <string name="error_description_login_dialog">Tidak boleh ada data yang kosong.</style>
-    <string name="error_description_password_login_dialog">Kolom password tidak boleh kurang dari 8 karakter.</string>
-    <string name="success_title_login_dialog">Anda berhasil login.</string>
-    <string name="success_description_momen_login_dialog">Silahkan bagikan momen anda.</string>
-    <string name="error_title_signup_account_login_dialog">Akun anda belum terdaftar.</string>
-    <string name="error_description_signup_account_login_dialog">Silahkan buat akun terlebih dahulu.</string>
-    <string name="next_signup_account">Lanjut Daftar Akun</string>
-    <string name="title_logout_account_dialog">Ingin keluar akun ?</string>
-    <string name="yes_logout_account_dialog">Ya</string>
-    <string name="upload_error_title_dialog">Unggah Gagal</string>
-    <string name="upload_error_description_dialog">Tidak boleh ada data yang kosong.</string>
-    <string name="registration_success_title_dialog">"Pendaftaran Akun Berhasil "</string>
-    <string name="registration_success_description_dialog">Akun dengan %1$s sudah jadi nih. Yuk, login dan berbagi story dengan yang lain.</string>
-    <string name="registration_text_dialog">Lanjut</string>
+    <string name="error_title_login_dialog">Login Failed</string>
+    <string name="error_description_login_dialog">There should be no blank data.</string>
+    <string name="error_description_password_login_dialog">The password field cannot be less than 8 characters.</string>
+    <string name="success_title_login_dialog">You have successfully logged in.</string>
+    <string name="success_description_momen_login_dialog">Please share your moments.</string>
+    <string name="error_title_signup_account_login_dialog">Your account has not been registered.</string>
+    <string name="error_description_signup_account_login_dialog">Please create an account first.</string>
+    <string name="next_signup_account">Continue to Register Account</string>
+    <string name="title_logout_account_dialog">Want to log out of your account?</string>
+    <string name="yes_logout_account_dialog">Yes</string>
+    <string name="upload_error_title_dialog">Upload Failed</string>
+    <string name="upload_error_description_dialog">There should be no blank data.</string>
+    <string name="registration_success_title_dialog">Account Registration Successful</string>
+    <string name="registration_success_description_dialog">Account with %1$s is ready. Let\'s login and share stories with others.</string>
+    <string name="registration_text_dialog">Next</string>
+    <string name="pass_hint">Enter your password</string>
 </resources>
