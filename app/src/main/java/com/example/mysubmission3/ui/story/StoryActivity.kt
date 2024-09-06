@@ -3,6 +3,7 @@ package com.example.mysubmission3.ui.story
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.pedant.SweetAlert.SweetAlertDialog
@@ -27,6 +29,8 @@ import com.example.mysubmission3.ui.add.AddActivity
 import com.example.mysubmission3.ui.detail.DetailActivity
 import com.example.mysubmission3.ui.detail.DetailActivity.Companion.EXTRA_ID
 import com.example.mysubmission3.ui.detail.DetailActivity.Companion.EXTRA_TOKEN
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class StoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStoryBinding
@@ -82,7 +86,7 @@ class StoryActivity : AppCompatActivity() {
         binding.rvList.layoutManager = LinearLayoutManager(this)
         val itemDecoration = DividerItemDecoration(this, LinearLayoutManager(this).orientation)
         binding.rvList.addItemDecoration(itemDecoration)
-        viewModel.getAllStoryItem(token)
+        viewModel.getAllStoryItem()
         viewModel.getListStoryItem().observe(this) { listStoryItem ->
             setStoryItem(token, listStoryItem)
         }
@@ -107,36 +111,48 @@ class StoryActivity : AppCompatActivity() {
     }
 
     private fun logoutUser() {
-        SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-            .setTitleText(getString(R.string.title_logout_account_dialog))
-            .setConfirmButton(getString(R.string.yes_logout_account_dialog)) {
-                UserModel(userId = "", name = "", token = "", isLogin = false)
-                viewModel.logout()
-                val intent = Intent(this@StoryActivity, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(intent)
-            }
-            .show()
+//        SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+//            .setTitleText(getString(R.string.title_logout_account_dialog))
+//            .setConfirmButton(getString(R.string.yes_logout_account_dialog)) {
+//                UserModel(userId = "", name = "", token = "", isLogin = false)
+//                viewModel.logout()
+//                val intent = Intent(this@StoryActivity, MainActivity::class.java)
+//                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+//                startActivity(intent)
+//            }
+//            .show()
+        viewModel.logout()
+        val intent = Intent(this@StoryActivity, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
     }
 
     private fun getDataExtra() {
         val getActivityData = intent.getStringExtra(EXTRA_ACTIVITY)
+
         if (getActivityData == "LoginActivity") {
             val getLoginResultData = intent.getParcelableExtra<LoginResult>(EXTRA_OBJECT)
+            val getNameData = getLoginResultData!!.name
             val getTokenData = getLoginResultData!!.token as String
+            Log.i(TAG, "Nama data: $getNameData, Token data: $getTokenData")
             setupRecyclerViewItem(getTokenData)
         } else if (getActivityData == "AddActivity") {
             val getUserModelData = intent.getParcelableExtra<UserModel>(EXTRA_OBJECT)
+            val getNameData = getUserModelData!!.name
             val getTokenData = getUserModelData!!.token
+            Log.i(TAG, "Nama data: $getNameData, Token data: $getTokenData")
             setupRecyclerViewItem(getTokenData)
         } else {
             val getUserModelData = intent.getParcelableExtra<UserModel>(EXTRA_OBJECT)
+            val getNameData = getUserModelData!!.name
             val getTokenData = getUserModelData!!.token
+            Log.i(TAG, "Nama data: $getNameData, Token data: $getTokenData")
             setupRecyclerViewItem(getTokenData)
         }
     }
 
     companion object {
+        private val TAG = StoryActivity::class.java.simpleName
         const val EXTRA_OBJECT = "extra_object"
         const val EXTRA_ACTIVITY = "extra_activity"
     }

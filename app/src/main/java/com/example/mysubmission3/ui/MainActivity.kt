@@ -12,9 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.mysubmission3.R
-import com.example.mysubmission3.data.api.response.LoginResult
 import com.example.mysubmission3.databinding.ActivityMainBinding
-import com.example.mysubmission3.datastore.user.UserModel
 import com.example.mysubmission3.ui.login.LoginActivity
 import com.example.mysubmission3.ui.signup.SignUpActivity
 import com.example.mysubmission3.ui.story.StoryActivity

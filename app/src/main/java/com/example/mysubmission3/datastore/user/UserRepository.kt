@@ -52,19 +52,19 @@ class UserRepository private constructor(
         userPreference.logout()
     }
 
-    suspend fun isRegisteredUser(token: String, name: String, email: String, password: String) {
+    suspend fun isRegisteredUser(name: String, email: String, password: String) {
         _isLoading.value = true
-        val client = ApiConfig.getApiService(token).register(name, email, password)
+        val client = apiService.register(name, email, password)
         val message = client.message
         _message.value = message as String
         _isLoading.value = false
         Log.d(TAG, "onIsRegisteredUser : ${_message.value}")
     }
 
-    suspend fun login(token: String, email: String, password: String) {
+    suspend fun login(email: String, password: String) {
         try {
             _isLoading.value = true
-            val client = ApiConfig.getApiService(token).login(email, password)
+            val client = apiService.login(email, password)
             val loginResult = client.loginResult
             _loginResult.value = loginResult as LoginResult
             _isLoading.value = false
@@ -74,17 +74,17 @@ class UserRepository private constructor(
         }
     }
 
-    suspend fun getAllStories(token: String){
+    suspend fun getAllStories(){
         _isLoading.value = true
-        val client = ApiConfig.getApiService(token).getAllStories()
+        val client = apiService.getAllStories()
         _getListStoryItem.value = client.listStory as List<ListStoryItem>
         _isLoading.value = false
         Log.d(TAG, "onGetListStoryItem : ${_getListStoryItem.value}")
     }
 
-    suspend fun detailStory(token: String, id: String) {
+    suspend fun detailStory(id: String) {
         _isLoading.value = true
-        val client = ApiConfig.getApiService(token).detailStory(id)
+        val client = apiService.detailStory(id)
         _story.value = client.story as Story
         _isLoading.value = false
         Log.d(TAG, "onDetailStory : ${_story.value}")

@@ -43,15 +43,15 @@ class MainViewModel(private val userRepository: UserRepository): ViewModel() {
         return userRepository.loginResult
     }
 
-    fun isRegistered(token: String, name: String, email: String, password: String) {
+    fun isRegistered(name: String, email: String, password: String) {
         viewModelScope.launch {
-            userRepository.isRegisteredUser(token, name, email, password)
+            userRepository.isRegisteredUser(name, email, password)
         }
     }
 
-    fun login(token: String, email: String, password: String) {
+    fun login(email: String, password: String) {
         viewModelScope.launch {
-            userRepository.login(token, email, password)
+            userRepository.login(email, password)
         }
     }
 
@@ -59,15 +59,15 @@ class MainViewModel(private val userRepository: UserRepository): ViewModel() {
         return userRepository.getListStoryItem
     }
 
-    fun getAllStoryItem(token: String) {
+    fun getAllStoryItem() {
         viewModelScope.launch {
-            userRepository.getAllStories(token)
+            userRepository.getAllStories()
         }
     }
 
-    fun detailStory(token: String, id: String) {
+    fun detailStory(id: String) {
         viewModelScope.launch {
-            userRepository.detailStory(token, id)
+            userRepository.detailStory(id)
         }
     }
 

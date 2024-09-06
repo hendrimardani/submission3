@@ -38,7 +38,7 @@ class DetailActivity : AppCompatActivity() {
         val getIdData = intent.getStringExtra(EXTRA_ID) as String
         val getTokenData = intent.getStringExtra(EXTRA_TOKEN) as String
         Log.d(TAG, "ID User: $getIdData, Token User : $getTokenData")
-        viewModel.detailStory(getTokenData, getIdData)
+        viewModel.detailStory(getIdData)
         viewModel.getDetailStory().observe(this) { storyUser ->
             Glide.with(this@DetailActivity)
                 .load(storyUser.photoUrl)

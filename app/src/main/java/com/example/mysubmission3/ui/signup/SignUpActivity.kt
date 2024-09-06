@@ -75,7 +75,7 @@ class SignUpActivity : AppCompatActivity() {
                     .setContentText(getString(R.string.error_description_password_login_dialog))
                     .show()
             } else {
-                viewModel.isRegistered(token="", name=name, email=email, password=password)
+                viewModel.isRegistered(name=name, email=email, password=password)
                 AlertDialog.Builder(this).apply {
                     setTitle(getString(R.string.registration_success_title_dialog))
                     setMessage(getString(R.string.registration_success_description_dialog, email))
