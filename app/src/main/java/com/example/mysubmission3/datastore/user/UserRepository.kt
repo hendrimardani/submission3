@@ -21,7 +21,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
 import java.io.File
 
-class UserRepository private constructor(
+class UserRepository(
     private val apiService: ApiService,
     private val userPreference: UserPreference
 ) {
@@ -113,15 +113,5 @@ class UserRepository private constructor(
 
     companion object {
         private val TAG = UserRepository::class.java.simpleName
-
-        @Volatile
-        private var instance: UserRepository? = null
-        fun getInstance(apiService: ApiService, userPreference: UserPreference): UserRepository =
-            instance ?: synchronized(this) {
-                instance ?: UserRepository(
-                    apiService,
-                    userPreference
-                )
-            }.also { instance = it }
     }
 }

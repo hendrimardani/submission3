@@ -139,13 +139,13 @@ class StoryActivity : AppCompatActivity() {
         } else if (getActivityData == "AddActivity") {
             val getUserModelData = intent.getParcelableExtra<UserModel>(EXTRA_OBJECT)
             val getNameData = getUserModelData!!.name
-            val getTokenData = getUserModelData!!.token
+            val getTokenData = getUserModelData.token
             Log.i(TAG, "Nama data: $getNameData, Token data: $getTokenData")
             setupRecyclerViewItem(getTokenData)
         } else {
             val getUserModelData = intent.getParcelableExtra<UserModel>(EXTRA_OBJECT)
             val getNameData = getUserModelData!!.name
-            val getTokenData = getUserModelData!!.token
+            val getTokenData = getUserModelData.token
             Log.i(TAG, "Nama data: $getNameData, Token data: $getTokenData")
             setupRecyclerViewItem(getTokenData)
         }
