@@ -124,7 +124,14 @@ class AddActivity : AppCompatActivity() {
 
     private fun showDialog(isSuccess: Boolean, title: String, message: String) {
         if (isSuccess) {
-            customDialogForSuccessResult()
+//            customDialogForSuccessResult()
+            viewModel.getSession().observe(this@AddActivity) { userModel ->
+                val intent = Intent(this, StoryActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                intent.putExtra(EXTRA_ACTIVITY, TAG)
+                intent.putExtra(EXTRA_OBJECT, userModel)
+                startActivity(intent)
+            }
         } else {
             SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
                 .setTitleText(title)
@@ -133,28 +140,28 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
-    private fun customDialogForSuccessResult() {
-        val customDialog = Dialog(this)
-        val dialogBinding = DialogCustomeForSuccessResultBinding.inflate(layoutInflater)
-
-        customDialog.setContentView(dialogBinding.root)
-        customDialog.setCanceledOnTouchOutside(false)
-        customDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogBinding.tvTitle.text = getString(R.string.title_dialog_custome)
-        dialogBinding.tvDescription.text = getString(R.string.description_dialog_custome)
-
-        dialogBinding.tvYes.setOnClickListener {
-            viewModel.getSession().observe(this@AddActivity) { userModel ->
-                val intent = Intent(this, StoryActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                intent.putExtra(EXTRA_ACTIVITY, TAG)
-                intent.putExtra(EXTRA_OBJECT, userModel)
-                startActivity(intent)
-            }
-        }
-        customDialog.setCancelable(false)
-        customDialog.show()
-    }
+//    private fun customDialogForSuccessResult() {
+//        val customDialog = Dialog(this)
+//        val dialogBinding = DialogCustomeForSuccessResultBinding.inflate(layoutInflater)
+//
+//        customDialog.setContentView(dialogBinding.root)
+//        customDialog.setCanceledOnTouchOutside(false)
+//        customDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//        dialogBinding.tvTitle.text = getString(R.string.title_dialog_custome)
+//        dialogBinding.tvDescription.text = getString(R.string.description_dialog_custome)
+//
+//        dialogBinding.tvYes.setOnClickListener {
+//            viewModel.getSession().observe(this@AddActivity) { userModel ->
+//                val intent = Intent(this, StoryActivity::class.java)
+//                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+//                intent.putExtra(EXTRA_ACTIVITY, TAG)
+//                intent.putExtra(EXTRA_OBJECT, userModel)
+//                startActivity(intent)
+//            }
+//        }
+//        customDialog.setCancelable(false)
+//        customDialog.show()
+//    }
 
     companion object {
         private val TAG = AddActivity::class.java.simpleName

@@ -103,8 +103,8 @@ class LoginActivity : AppCompatActivity() {
                     .show()
             } else {
                 viewModel.login(email = email, password = password)
-//                lifecycleScope.launch {
-//                    delay(7000)
+                lifecycleScope.launch {
+                    delay(7000)
                     if (!ERROR_RESPONSE) {
                         AlertDialog.Builder(this@LoginActivity).apply {
                             setTitle(getString(R.string.success_title_login_dialog))
@@ -137,7 +137,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                         ERROR_RESPONSE = false
                     }
-//                }
+                }
             }
         }
     }
