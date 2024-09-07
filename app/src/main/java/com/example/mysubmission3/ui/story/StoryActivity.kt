@@ -1,5 +1,6 @@
 package com.example.mysubmission3.ui.story
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
@@ -37,6 +38,7 @@ class StoryActivity : AppCompatActivity() {
     private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this)
     }
+    private var sweetAlertDialog: SweetAlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,21 +112,22 @@ class StoryActivity : AppCompatActivity() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun logoutUser() {
-//        SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-//            .setTitleText(getString(R.string.title_logout_account_dialog))
-//            .setConfirmButton(getString(R.string.yes_logout_account_dialog)) {
-//                UserModel(userId = "", name = "", token = "", isLogin = false)
-//                viewModel.logout()
-//                val intent = Intent(this@StoryActivity, MainActivity::class.java)
-//                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-//                startActivity(intent)
-//            }
-//            .show()
-        viewModel.logout()
-        val intent = Intent(this@StoryActivity, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(intent)
+        sweetAlertDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+            sweetAlertDialog!!.setTitleText(getString(R.string.title_logout_account_dialog))
+            sweetAlertDialog!!.setConfirmButton(getString(R.string.yes_logout_account_dialog)) {
+                viewModel.logout()
+                val intent = Intent(this@StoryActivity, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            }
+            .show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (sweetAlertDialog != null) sweetAlertDialog!!.dismiss()
     }
 
     private fun getDataExtra() {

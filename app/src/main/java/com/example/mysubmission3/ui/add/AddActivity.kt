@@ -1,5 +1,6 @@
 package com.example.mysubmission3.ui.add
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
@@ -35,6 +36,8 @@ class AddActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
     private var currentImageUri: Uri? = null
+    private var customDialog: Dialog? = null
+    private var sweetAlertDialog: SweetAlertDialog? = null
 
     private val launcherIntentCamera = registerForActivityResult(
         ActivityResultContracts.TakePicture()
@@ -67,6 +70,7 @@ class AddActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        binding.progressBar.visibility = View.INVISIBLE
         viewModel.isLoading().observe(this) { bool -> showLoading(bool) }
         binding.btnCamera.setOnClickListener { startCamera() }
         binding.btnUpload.setOnClickListener { uploadImage() }
@@ -98,10 +102,10 @@ class AddActivity : AppCompatActivity() {
                     }
                 }
             } else {
-                SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-                    .setTitleText(getString(R.string.upload_error_title_dialog))
-                    .setContentText(getString(R.string.upload_error_description_dialog))
-                    .show()
+                sweetAlertDialog = SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                    sweetAlertDialog!!.setTitleText(getString(R.string.upload_error_title_dialog))
+                    sweetAlertDialog!!.setContentText(getString(R.string.upload_error_description_dialog))
+                    sweetAlertDialog!!.show()
             }
         } ?: showDialog(false, getString(R.string.title_add_error), getString(R.string.message_add_error))
     }
@@ -122,9 +126,29 @@ class AddActivity : AppCompatActivity() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun showDialog(isSuccess: Boolean, title: String, message: String) {
         if (isSuccess) {
-//            customDialogForSuccessResult()
+            customDialogForSuccessResult()
+        } else {
+            sweetAlertDialog = SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                sweetAlertDialog!!.setTitleText(title)
+                sweetAlertDialog!!.setContentText(message)
+                sweetAlertDialog!!.show()
+        }
+    }
+
+    private fun customDialogForSuccessResult() {
+        customDialog = Dialog(this)
+        val dialogBinding = DialogCustomeForSuccessResultBinding.inflate(layoutInflater)
+
+        customDialog!!.setContentView(dialogBinding.root)
+        customDialog!!.setCanceledOnTouchOutside(false)
+        customDialog!!.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogBinding.tvTitle.text = getString(R.string.title_dialog_custome)
+        dialogBinding.tvDescription.text = getString(R.string.description_dialog_custome)
+
+        dialogBinding.tvYes.setOnClickListener {
             viewModel.getSession().observe(this@AddActivity) { userModel ->
                 val intent = Intent(this, StoryActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -132,36 +156,16 @@ class AddActivity : AppCompatActivity() {
                 intent.putExtra(EXTRA_OBJECT, userModel)
                 startActivity(intent)
             }
-        } else {
-            SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-                .setTitleText(title)
-                .setContentText(message)
-                .show()
         }
+        customDialog!!.setCancelable(false)
+        customDialog!!.show()
     }
 
-//    private fun customDialogForSuccessResult() {
-//        val customDialog = Dialog(this)
-//        val dialogBinding = DialogCustomeForSuccessResultBinding.inflate(layoutInflater)
-//
-//        customDialog.setContentView(dialogBinding.root)
-//        customDialog.setCanceledOnTouchOutside(false)
-//        customDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//        dialogBinding.tvTitle.text = getString(R.string.title_dialog_custome)
-//        dialogBinding.tvDescription.text = getString(R.string.description_dialog_custome)
-//
-//        dialogBinding.tvYes.setOnClickListener {
-//            viewModel.getSession().observe(this@AddActivity) { userModel ->
-//                val intent = Intent(this, StoryActivity::class.java)
-//                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-//                intent.putExtra(EXTRA_ACTIVITY, TAG)
-//                intent.putExtra(EXTRA_OBJECT, userModel)
-//                startActivity(intent)
-//            }
-//        }
-//        customDialog.setCancelable(false)
-//        customDialog.show()
-//    }
+    override fun onDestroy() {
+        super.onDestroy()
+        if (customDialog != null) customDialog!!.dismiss()
+        if (sweetAlertDialog != null) sweetAlertDialog!!.dismiss()
+    }
 
     companion object {
         private val TAG = AddActivity::class.java.simpleName

@@ -38,6 +38,8 @@ class LoginActivity : AppCompatActivity() {
     private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this)
     }
+    private var sweetAlertDialog: SweetAlertDialog? = null
+    private var alertDialog: AlertDialog.Builder? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,9 +94,9 @@ class LoginActivity : AppCompatActivity() {
             val password = binding.passwordEditText.text.toString()
 
             if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
-                SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-                    .setTitleText(getString(R.string.error_title_login_dialog))
-                    .setContentText(getString(R.string.error_description_login_dialog))
+                sweetAlertDialog = SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                    sweetAlertDialog!!.setTitleText(getString(R.string.error_title_login_dialog))
+                    sweetAlertDialog!!.setContentText(getString(R.string.error_description_login_dialog))
                     .show()
             } else if (password.length < PASSWORD_LENGTH_LIMIT) {
                 SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
@@ -106,41 +108,39 @@ class LoginActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     delay(7000)
                     if (!ERROR_RESPONSE) {
-                        AlertDialog.Builder(this@LoginActivity).apply {
-                            setTitle(getString(R.string.success_title_login_dialog))
-                            setMessage(getString(R.string.success_description_momen_login_dialog))
-                            setPositiveButton("Lanjut") { _, _ ->
-                                viewModel.getLoginResult().observe(this@LoginActivity) { loginResult ->
-                                    viewModel.saveSession(UserModel(loginResult.userId.toString(), loginResult.name.toString(), loginResult.token.toString()))
-                                    Log.d(TAG, "onLoginSucces: ${loginResult.name}")
-                                    val intent = Intent(this@LoginActivity, StoryActivity::class.java)
-                                    intent.putExtra(EXTRA_ACTIVITY, TAG)
-                                    intent.putExtra(EXTRA_OBJECT, loginResult)
-                                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                    startActivity(intent)
-                                }
+                        alertDialog = AlertDialog.Builder(this@LoginActivity)
+                        alertDialog!!.setTitle(getString(R.string.success_title_login_dialog))
+                        alertDialog!!.setMessage(getString(R.string.success_description_momen_login_dialog))
+                        alertDialog!!.setPositiveButton("Lanjut") { _, _ ->
+                            viewModel.getLoginResult().observe(this@LoginActivity) { loginResult ->
+                                viewModel.saveSession(UserModel(loginResult.userId.toString(), loginResult.name.toString(), loginResult.token.toString()))
+                                Log.d(TAG, "onLoginSucces: ${loginResult.name}")
+                                val intent = Intent(this@LoginActivity, StoryActivity::class.java)
+                                intent.putExtra(EXTRA_ACTIVITY, TAG)
+                                intent.putExtra(EXTRA_OBJECT, loginResult)
+                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                startActivity(intent)
                             }
-                            setCancelable(false)
-                            create()
-                            show()
                         }
+                        alertDialog!!.setCancelable(false)
+                        alertDialog!!.create()
+                        alertDialog!!.show()
                     } else {
-                        AlertDialog.Builder(this@LoginActivity).apply {
-                            setTitle(getString(R.string.error_title_signup_account_login_dialog))
-                            setMessage(getString(R.string.error_description_signup_account_login_dialog))
-                            setPositiveButton(getString(R.string.next_signup_account)) { _, _ ->
-                                startActivity(Intent(this@LoginActivity, SignUpActivity::class.java))
-                            }
-                            setCancelable(false)
-                            create()
-                            show()
+                        alertDialog = AlertDialog.Builder(this@LoginActivity)
+                        alertDialog!!.setTitle(getString(R.string.error_title_signup_account_login_dialog))
+                        alertDialog!!.setMessage(getString(R.string.error_description_signup_account_login_dialog))
+                        alertDialog!!.setPositiveButton(getString(R.string.next_signup_account)) { _, _ ->
+                            startActivity(Intent(this@LoginActivity, SignUpActivity::class.java))
+                        }
+                        alertDialog!!.setCancelable(false)
+                        alertDialog!!.create()
+                        alertDialog!!.show()
                         }
                         ERROR_RESPONSE = false
                     }
                 }
             }
         }
-    }
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
@@ -165,6 +165,11 @@ class LoginActivity : AppCompatActivity() {
             playSequentially(image, title, message, email, emailEdit, pass, passEdit, login)
             start()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (alertDialog != null) alertDialog = null
     }
 
     companion object {

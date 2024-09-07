@@ -74,7 +74,7 @@ class UserRepository(
         }
     }
 
-    suspend fun getAllStories(){
+    suspend fun getAllStories() {
         _isLoading.value = true
         val client = apiService.getAllStories()
         _getListStoryItem.value = client.listStory as List<ListStoryItem>
