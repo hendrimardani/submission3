@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">Aplikasi Cerita Dicoding</string>
-    <string name="title_menu_1">Selamat datang di Aplikasi Dicoding Story! Bagikan cerita Anda sekarang.</string>
+    <string name="title_menu_1">Selamat datang di Aplikasi Cerita Dicoding! Bagikan cerita Anda sekarang.</string>
     <string name="title_menu_2">Aplikasi Cerita Dicoding: Dunia Anda dalam cerita.</string>
     <string name="title_menu_3">Ceritakan pengalaman Anda sepanjang masa!</string>
-    <string name="title_menu_4">Mulailah menulis cerita menarik Anda di Aplikasi Dicoding Story.</string>
+    <string name="title_menu_4">Mulailah menulis cerita menarik Anda di Aplikasi Cerita Dicoding.</string>
     <string name="desc_menu_1">StoryApp adalah tempat yang tepat untuk mengekspresikan diri Anda melalui tulisan. Ayo mulai menulis kisah-kisah yang menginspirasi!</string>
-    <string name="desc_menu_2">Dengan Aplikasi Dicoding Story, Anda dapat dengan mudah menulis, berbagi, dan membaca cerita dari berbagai penulis. Bergabunglah dengan komunitas kami sekarang!</string>
+    <string name="desc_menu_2">Dengan Aplikasi Cerita Dicoding, Anda dapat dengan mudah menulis, berbagi, dan membaca cerita dari berbagai penulis. Bergabunglah dengan komunitas kami sekarang!</string>
     <string name="desc_menu_3">Dengan berbagi pengalaman yang tak terlupakan, Anda dapat menjaga pengalaman Anda tetap berharga.</string>
     <string name="desc_menu_4">Ingin cerita pendek Anda dibaca oleh lebih banyak orang? StoryApp adalah platform yang tepat untuk Anda. Ayo mulai menulis!</string>
     <string name="signup">Daftar</string>
@@ -49,7 +49,8 @@
     <string name="upload_error_title_dialog">Unggah Gagal</string>
     <string name="upload_error_description_dialog">Tidak boleh ada data yang kosong.</string>
     <string name="registration_success_title_dialog">Pendaftaran Akun Berhasil</string>
-    <string name="registration_success_description_dialog">Akun dengan %1$s sudah jadi nih. Yuk, login dan berbagi story dengan yang lain.</string>
+    <string name="registration_success_description_dialog">Akun dengan %1$s sudah jadi nih. Yuk, login dan berbagi ceritan dengan yang lain.</string>
     <string name="registration_text_dialog">Lanjut</string>
     <string name="pass_hint">Masukkan kata sandi anda</string>
+    <string name="error_description_email_login_dialog">Email harus memiliki pola @gmail.com di akhir</string>
 </resources>

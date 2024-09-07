@@ -11,7 +11,7 @@ import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 
-class MyPasswordEditText @JvmOverloads constructor(
+class MyEmailEditText @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : AppCompatEditText(context, attrs), View.OnTouchListener {
 
@@ -26,7 +26,10 @@ class MyPasswordEditText @JvmOverloads constructor(
                 // Do nothing.
             }
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.length < PASSWORD_LENGTH_LIMIT) error = resources.getString(R.string.error_description_password_login_dialog)
+                val pattern = "(@gmail.com)$"
+                if (!s.contains(Regex(pattern))) {
+                    error = resources.getString(R.string.error_description_email_login_dialog)
+                }
             }
             override fun afterTextChanged(s: Editable) {
                 // Do nothing.
@@ -74,7 +77,7 @@ class MyPasswordEditText @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        hint = resources.getString(R.string.pass_hint)
+        hint = resources.getString(R.string.email_hint)
         textAlignment = View.TEXT_ALIGNMENT_TEXT_START
     }
 
@@ -88,8 +91,8 @@ class MyPasswordEditText @JvmOverloads constructor(
 
     private fun setButtonDrawables(
         startOfTheText: Drawable? = null,
-        topOfTheText:Drawable? = null,
-        endOfTheText:Drawable? = null,
+        topOfTheText: Drawable? = null,
+        endOfTheText: Drawable? = null,
         bottomOfTheText: Drawable? = null
     ) {
         setCompoundDrawablesWithIntrinsicBounds(

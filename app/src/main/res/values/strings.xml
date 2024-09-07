@@ -52,4 +52,5 @@
     <string name="registration_success_description_dialog">Account with %1$s is ready. Let\'s login and share stories with others.</string>
     <string name="registration_text_dialog">Next</string>
     <string name="pass_hint">Enter your password</string>
+    <string name="error_description_email_login_dialog">Emails must have the @gmail.com pattern at the end</string>
 </resources>

@@ -2,6 +2,7 @@ package com.example.mysubmission3.ui.login
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -88,6 +89,7 @@ class LoginActivity : AppCompatActivity() {
         binding.loginButton.isEnabled = result != null && result.isNotEmpty()
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun loginButton() {
         binding.loginButton.setOnClickListener {
             val email = binding.emailEditText.text.toString()
@@ -111,7 +113,7 @@ class LoginActivity : AppCompatActivity() {
                         alertDialog = AlertDialog.Builder(this@LoginActivity)
                         alertDialog!!.setTitle(getString(R.string.success_title_login_dialog))
                         alertDialog!!.setMessage(getString(R.string.success_description_momen_login_dialog))
-                        alertDialog!!.setPositiveButton("Lanjut") { _, _ ->
+                        alertDialog!!.setPositiveButton(getString(R.string.registration_text_dialog)) { _, _ ->
                             viewModel.getLoginResult().observe(this@LoginActivity) { loginResult ->
                                 viewModel.saveSession(UserModel(loginResult.userId.toString(), loginResult.name.toString(), loginResult.token.toString()))
                                 Log.d(TAG, "onLoginSucces: ${loginResult.name}")
