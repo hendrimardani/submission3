@@ -53,4 +53,5 @@
     <string name="registration_text_dialog">Next</string>
     <string name="pass_hint">Enter your password</string>
     <string name="error_description_email_login_dialog">Emails must have the @gmail.com pattern at the end</string>
+    <string name="pattern">(@gmail.com)$</string>
 </resources>

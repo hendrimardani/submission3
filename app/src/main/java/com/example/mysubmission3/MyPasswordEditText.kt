@@ -22,53 +22,16 @@ class MyPasswordEditText @JvmOverloads constructor(
         setOnTouchListener(this)
 
         addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // Do nothing.
-            }
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) { }
+
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (s.length < PASSWORD_LENGTH_LIMIT) error = resources.getString(R.string.error_description_password_login_dialog)
             }
-            override fun afterTextChanged(s: Editable) {
-                // Do nothing.
-            }
+            override fun afterTextChanged(s: Editable) { }
         })
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        if (compoundDrawables[2] != null) {
-            val imageStart: Float
-            val imageEnd: Float
-            var isClearButtonClicked = false
-            if (layoutDirection == View.LAYOUT_DIRECTION_RTL) {
-                imageEnd = (showImage.intrinsicWidth + paddingStart).toFloat()
-                when {
-                    event!!.x < imageEnd -> isClearButtonClicked = true
-                }
-            } else {
-                imageStart = (width - paddingEnd - showImage.intrinsicWidth).toFloat()
-                when {
-                    event!!.x > imageStart -> isClearButtonClicked = true
-                }
-            }
-            if (isClearButtonClicked) {
-                when (event!!.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        showImage = ContextCompat.getDrawable(context, R.drawable.ic_error_24px) as Drawable
-                        showError()
-                        return true
-                    }
-                    MotionEvent.ACTION_UP -> {
-                        showImage = ContextCompat.getDrawable(context, R.drawable.ic_error_24px) as Drawable
-                        when {
-                            text != null -> text?.clear()
-                        }
-                        hideError()
-                        return true
-                    }
-                    else -> return false
-                }
-            } else return false
-        }
         return false
     }
 
@@ -76,28 +39,6 @@ class MyPasswordEditText @JvmOverloads constructor(
         super.onDraw(canvas)
         hint = resources.getString(R.string.pass_hint)
         textAlignment = View.TEXT_ALIGNMENT_TEXT_START
-    }
-
-    private fun showError() {
-        setButtonDrawables(endOfTheText = showImage)
-    }
-
-    private fun hideError() {
-        setButtonDrawables()
-    }
-
-    private fun setButtonDrawables(
-        startOfTheText: Drawable? = null,
-        topOfTheText:Drawable? = null,
-        endOfTheText:Drawable? = null,
-        bottomOfTheText: Drawable? = null
-    ) {
-        setCompoundDrawablesWithIntrinsicBounds(
-            startOfTheText,
-            topOfTheText,
-            endOfTheText,
-            bottomOfTheText
-        )
     }
 
     companion object {
