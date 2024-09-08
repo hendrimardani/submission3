@@ -30,6 +30,7 @@ class DetailActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        supportActionBar!!.title = getString(R.string.detail_activity)
         viewModel.isLoading().observe(this) { bool -> showLoading(bool) }
         getDataExtra()
     }

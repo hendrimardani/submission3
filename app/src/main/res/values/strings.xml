@@ -53,5 +53,11 @@
     <string name="registration_text_dialog">Next</string>
     <string name="pass_hint">Enter your password</string>
     <string name="error_description_email_login_dialog">Emails must have the @gmail.com pattern at the end</string>
-    <string name="pattern">(@gmail.com)$</string>
+    <string name="pattern" translatable="false">(@gmail.com)$</string>
+    <string name="appwidget_text">Dicoding Story App</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+    <string name="empty_text">No Data</string>
+    <string name="add_story">Add Story</string>
+    <string name="detail_activity">Detail</string>
 </resources>

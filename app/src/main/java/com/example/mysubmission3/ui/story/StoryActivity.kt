@@ -12,6 +12,7 @@ import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -91,6 +92,7 @@ class StoryActivity : AppCompatActivity() {
         viewModel.getAllStoryItem()
         viewModel.getListStoryItem().observe(this) { listStoryItem ->
             setStoryItem(token, listStoryItem)
+            mListStoryItem.add(listStoryItem)
         }
     }
 
@@ -103,7 +105,7 @@ class StoryActivity : AppCompatActivity() {
                 val intent = Intent(this@StoryActivity, DetailActivity::class.java)
                 intent.putExtra(EXTRA_ID, item.id)
                 intent.putExtra(EXTRA_TOKEN, token)
-                startActivity(intent)
+                startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(this@StoryActivity).toBundle())
             }
         })
     }
@@ -155,6 +157,8 @@ class StoryActivity : AppCompatActivity() {
     }
 
     companion object {
+        var mListStoryItem = ArrayList<List<ListStoryItem>>()
+
         private val TAG = StoryActivity::class.java.simpleName
         const val EXTRA_OBJECT = "extra_object"
         const val EXTRA_ACTIVITY = "extra_activity"

@@ -59,6 +59,10 @@ class MainViewModel(private val userRepository: UserRepository): ViewModel() {
         return userRepository.getListStoryItem
     }
 
+    fun getListStoryWidgetItem(): List<ListStoryItem> {
+        return userRepository.getListStoryWidgetItem
+    }
+
     fun getAllStoryItem() {
         viewModelScope.launch {
             userRepository.getAllStories()

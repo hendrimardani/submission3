@@ -70,6 +70,7 @@ class AddActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        supportActionBar!!.title = getString(R.string.add_story)
         binding.progressBar.visibility = View.INVISIBLE
         viewModel.isLoading().observe(this) { bool -> showLoading(bool) }
         binding.btnCamera.setOnClickListener { startCamera() }

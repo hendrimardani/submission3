@@ -31,6 +31,9 @@ class UserRepository(
     private var _getListStoryItem = MutableLiveData<List<ListStoryItem>>()
     val getListStoryItem: LiveData<List<ListStoryItem>> = _getListStoryItem
 
+    private var _getListStoryWidgetItem = ArrayList<ListStoryItem>()
+    val getListStoryWidgetItem: List<ListStoryItem> = _getListStoryWidgetItem
+
     private val _message = MutableLiveData<String>()
     val message: LiveData<String> = _message
 

@@ -53,4 +53,10 @@
     <string name="registration_text_dialog">Lanjut</string>
     <string name="pass_hint">Masukkan kata sandi anda</string>
     <string name="error_description_email_login_dialog">Email harus memiliki pola @gmail.com di akhir</string>
+    <string name="appwidget_text">Aplikasi Cerita Dicoding</string>
+    <string name="add_widget">Tambah Widget</string>
+    <string name="app_widget_description">Ini adalah aplikasi widget deskripsi</string>
+    <string name="empty_text">Tidak ada data</string>
+    <string name="add_story">Tambah Cerita</string>
+    <string name="detail_activity">Detail</string>
 </resources>
