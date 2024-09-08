@@ -89,7 +89,6 @@ class StoryActivity : AppCompatActivity() {
         viewModel.getAllStoryItem()
         viewModel.getListStoryItem().observe(this) { listStoryItem ->
             setStoryItem(token, listStoryItem)
-            mListStoryItem.add(listStoryItem)
         }
     }
 
@@ -162,8 +161,6 @@ class StoryActivity : AppCompatActivity() {
     }
 
     companion object {
-        var mListStoryItem = ArrayList<List<ListStoryItem>>()
-
         private val TAG = StoryActivity::class.java.simpleName
         const val EXTRA_OBJECT = "extra_object"
         const val EXTRA_ACTIVITY = "extra_activity"
