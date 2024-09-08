@@ -73,9 +73,11 @@ class AddActivity : AppCompatActivity() {
         supportActionBar!!.title = getString(R.string.add_story)
         binding.progressBar.visibility = View.INVISIBLE
         viewModel.isLoading().observe(this) { bool -> showLoading(bool) }
-        binding.btnCamera.setOnClickListener { startCamera() }
-        binding.btnUpload.setOnClickListener { uploadImage() }
-        binding.btnGallery.setOnClickListener { startGallery() }
+        binding.apply {
+            btnCamera.setOnClickListener { startCamera() }
+            btnUpload.setOnClickListener { uploadImage() }
+            btnCamera.setOnClickListener { startCamera() }
+        }
     }
     
     private fun startGallery() {
