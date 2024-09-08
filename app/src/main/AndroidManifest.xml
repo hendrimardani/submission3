@@ -14,18 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MySubmission3"
         tools:targetApi="31">
-        <receiver
-            android:name=".stack_widget.ImagesBannerWidget"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/image_banner_widget_info" />
-        </receiver>
-
         <activity
             android:name=".ui.add.AddActivity"
             android:exported="false" />
@@ -50,10 +38,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <service
-            android:name=".stack_widget.StackWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

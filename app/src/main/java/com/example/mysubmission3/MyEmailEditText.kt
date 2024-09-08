@@ -22,18 +22,15 @@ class MyEmailEditText @JvmOverloads constructor(
         setOnTouchListener(this)
 
         addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                println("MyEmailEdtiText $start terpanggil")
-            }
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) { }
+
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 val pattern = context.getString(R.string.pattern)
                 if (!s.contains(Regex(pattern))) {
                     error = resources.getString(R.string.error_description_email_login_dialog)
                 }
             }
-            override fun afterTextChanged(s: Editable) {
-                println("MyEmailEdtiText $s terpanggil")
-            }
+            override fun afterTextChanged(s: Editable) { }
         })
     }
 

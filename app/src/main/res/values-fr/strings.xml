@@ -54,10 +54,8 @@
     <string name="pass_hint">Entrez votre mot de passe</string>
     <string name="error_description_email_login_dialog">Les courriels doivent comporter le motif @gmail.com à la fin.</string>
     <string name="pattern" translatable="false">(@gmail.com)$</string>
-    <string name="appwidget_text">L\'application Dicoding Story</string>
     <string name="add_widget">Ajouter un widget</string>
     <string name="app_widget_description">Il s\'agit d\'une description de widget d\'application</string>
-    <string name="empty_text">Pas de données</string>
     <string name="add_story">Ajouter un article</string>
     <string name="detail_activity">Détail</string>
     <string name="title_information_dialog">Informations</string>
