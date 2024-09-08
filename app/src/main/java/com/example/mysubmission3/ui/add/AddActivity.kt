@@ -76,7 +76,7 @@ class AddActivity : AppCompatActivity() {
         binding.apply {
             btnCamera.setOnClickListener { startCamera() }
             btnUpload.setOnClickListener { uploadImage() }
-            btnCamera.setOnClickListener { startCamera() }
+            btnGallery.setOnClickListener { startGallery() }
         }
     }
     
