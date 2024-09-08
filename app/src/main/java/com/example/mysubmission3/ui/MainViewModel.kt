@@ -1,6 +1,5 @@
 package com.example.mysubmission3.ui
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -10,7 +9,6 @@ import com.example.mysubmission3.data.api.response.LoginResult
 import com.example.mysubmission3.data.api.response.Story
 import com.example.mysubmission3.datastore.user.UserModel
 import com.example.mysubmission3.datastore.user.UserRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 

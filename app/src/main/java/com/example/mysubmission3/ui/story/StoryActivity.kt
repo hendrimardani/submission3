@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.pedant.SweetAlert.SweetAlertDialog
@@ -31,8 +30,6 @@ import com.example.mysubmission3.ui.add.AddActivity
 import com.example.mysubmission3.ui.detail.DetailActivity
 import com.example.mysubmission3.ui.detail.DetailActivity.Companion.EXTRA_ID
 import com.example.mysubmission3.ui.detail.DetailActivity.Companion.EXTRA_TOKEN
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class StoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStoryBinding
