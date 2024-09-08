@@ -9,7 +9,6 @@ import com.example.mysubmission3.data.api.response.AddNewStoryResponse
 import com.example.mysubmission3.data.api.response.ListStoryItem
 import com.example.mysubmission3.data.api.response.LoginResult
 import com.example.mysubmission3.data.api.response.Story
-import com.example.mysubmission3.data.api.retrofit.ApiConfig
 import com.example.mysubmission3.data.api.retrofit.ApiService
 import com.example.mysubmission3.ui.login.LoginActivity.Companion.ERROR_RESPONSE
 import com.google.gson.Gson
@@ -31,9 +30,6 @@ class UserRepository(
     private var _getListStoryItem = MutableLiveData<List<ListStoryItem>>()
     val getListStoryItem: LiveData<List<ListStoryItem>> = _getListStoryItem
 
-    private var _getListStoryWidgetItem = ArrayList<ListStoryItem>()
-    val getListStoryWidgetItem: List<ListStoryItem> = _getListStoryWidgetItem
-
     private val _message = MutableLiveData<String>()
     val message: LiveData<String> = _message
 
@@ -52,7 +48,11 @@ class UserRepository(
     }
 
     suspend fun logout() {
-        userPreference.logout()
+        try {
+            userPreference.logout()
+        } catch (e: HttpException) {
+            Log.e(TAG, e.message())
+        }
     }
 
     suspend fun isRegisteredUser(name: String, email: String, password: String) {

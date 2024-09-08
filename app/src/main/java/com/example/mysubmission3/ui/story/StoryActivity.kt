@@ -138,8 +138,16 @@ class StoryActivity : AppCompatActivity() {
         if (getActivityData == "LoginActivity") {
             val getLoginResultData = intent.getParcelableExtra<LoginResult>(EXTRA_OBJECT)
             val getNameData = getLoginResultData!!.name
-            val getTokenData = getLoginResultData!!.token as String
+            val getTokenData = getLoginResultData.token as String
             Log.i(TAG, "Nama data: $getNameData, Token data: $getTokenData")
+
+            sweetAlertDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+            sweetAlertDialog!!.setTitleText(getString(R.string.title_information_dialog))
+            sweetAlertDialog!!.setContentText(getString(R.string.description_information_dialog))
+            sweetAlertDialog!!.setConfirmButton(getString(R.string.yes_logout_account_dialog)) {
+                sweetAlertDialog!!.dismiss()
+            }.show()
+
             setupRecyclerViewItem(getTokenData)
         } else if (getActivityData == "AddActivity") {
             val getUserModelData = intent.getParcelableExtra<UserModel>(EXTRA_OBJECT)

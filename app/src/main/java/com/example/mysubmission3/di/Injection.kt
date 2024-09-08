@@ -1,7 +1,6 @@
 package com.example.mysubmission3.di
 
 import android.content.Context
-import android.util.Log
 import com.example.mysubmission3.data.api.retrofit.ApiConfig
 import com.example.mysubmission3.datastore.user.UserPreference
 import com.example.mysubmission3.datastore.user.UserRepository
