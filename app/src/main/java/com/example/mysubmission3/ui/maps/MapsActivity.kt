@@ -1,5 +1,6 @@
 package com.example.mysubmission3.ui.maps
 
+import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +9,6 @@ import androidx.activity.viewModels
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.mysubmission3.R
 import com.example.mysubmission3.ResultState
-import com.example.mysubmission3.data.api.response.ListStoriesWithLocation
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -20,6 +20,7 @@ import com.example.mysubmission3.databinding.ActivityMapsBinding
 import com.example.mysubmission3.ui.MainViewModel
 import com.example.mysubmission3.ui.ViewModelFactory
 import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MapStyleOptions
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
@@ -45,6 +46,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
         addManyMarkersStories()
+        setMapStyle()
     }
 
     private fun addManyMarkersStories() {
@@ -82,6 +84,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     }
                 }
             }
+        }
+    }
+
+    private fun setMapStyle() {
+        try {
+            val success =
+                mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.maps_style))
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.")
+            }
+        } catch (exception: Resources.NotFoundException) {
+            Log.e(TAG, "Can't find style. Error: ", exception)
         }
     }
 
