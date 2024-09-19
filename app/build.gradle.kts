@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.androidx.work.runtime)
     implementation(libs.android.com.github.f0ris.sweetalert.library)
+    implementation(libs.lottie)
 
     // testing
     testImplementation(libs.junit)

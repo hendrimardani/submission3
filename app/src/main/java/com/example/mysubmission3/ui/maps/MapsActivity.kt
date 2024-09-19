@@ -37,6 +37,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        viewModel.isLoading().observe(this) { bool -> showLoading(bool) }
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -71,9 +73,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-//    private fun showLoading(isLoading: Boolean) {
-//        binding.if (isLoading) View.VISIBLE else View.INVISIBLE
-//    }
+    private fun showLoading(isLoading: Boolean) {
+        binding.loading.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
+    }
+
 
     companion object {
         private val TAG = MapsActivity::class.java.simpleName

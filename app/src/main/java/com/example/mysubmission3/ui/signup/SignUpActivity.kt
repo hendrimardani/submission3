@@ -90,7 +90,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
+        binding.loading.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
     }
 
     private fun playAnimation() {

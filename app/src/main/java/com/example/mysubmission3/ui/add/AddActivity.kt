@@ -71,7 +71,7 @@ class AddActivity : AppCompatActivity() {
             insets
         }
         supportActionBar!!.title = getString(R.string.add_story)
-        binding.progressBar.visibility = View.INVISIBLE
+        binding.loading.visibility = View.INVISIBLE
         viewModel.isLoading().observe(this) { bool -> showLoading(bool) }
         binding.apply {
             btnCamera.setOnClickListener { startCamera() }
@@ -127,7 +127,7 @@ class AddActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading:Boolean = false) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
+        binding.loading.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
     }
 
     @SuppressLint("SuspiciousIndentation")

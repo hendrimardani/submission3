@@ -52,7 +52,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
+        binding.loading.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
     }
 
     companion object {
