@@ -6,19 +6,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.example.mysubmission3.ResultState
 import com.example.mysubmission3.data.api.response.AddNewStoryResponse
-import com.example.mysubmission3.data.api.response.ListStoriesWithLocation
-import com.example.mysubmission3.data.api.response.ListStoryItem
+import com.example.mysubmission3.data.api.response.DetailStoryResponse
+import com.example.mysubmission3.data.api.response.GetAllStoriesResponse
+import com.example.mysubmission3.data.api.response.LoginResponse
 import com.example.mysubmission3.data.api.response.LoginResult
-import com.example.mysubmission3.data.api.response.Story
+import com.example.mysubmission3.data.api.response.RegisterResponse
+import com.example.mysubmission3.data.api.response.StoriesWithLocationResponse
 import com.example.mysubmission3.data.api.retrofit.ApiService
-import com.example.mysubmission3.ui.login.LoginActivity.Companion.ERROR_RESPONSE
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.internal.toImmutableList
 import retrofit2.HttpException
 import java.io.File
 
@@ -26,20 +26,8 @@ class UserRepository(
     private val apiService: ApiService,
     private val userPreference: UserPreference
 ) {
-    private var _getListStoresWithLocation = MutableLiveData<List<ListStoriesWithLocation>>()
-    val getListStoresWithLocation: LiveData<List<ListStoriesWithLocation>> = _getListStoresWithLocation
-
-    private var _story = MutableLiveData<Story>()
-    val story: LiveData<Story> = _story
-
-    private var _getListStoryItem = MutableLiveData<List<ListStoryItem>>()
-    val getListStoryItem: LiveData<List<ListStoryItem>> = _getListStoryItem
-
     private val _message = MutableLiveData<String>()
     val message: LiveData<String> = _message
-
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
 
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
@@ -60,46 +48,63 @@ class UserRepository(
         }
     }
 
-    suspend fun isRegisteredUser(name: String, email: String, password: String) {
-        _isLoading.value = true
-        val client = apiService.register(name, email, password)
-        val message = client.message
-        _message.value = message as String
-        _isLoading.value = false
-        Log.d(TAG, "onIsRegisteredUser : ${_message.value}")
-    }
-
-    suspend fun login(email: String, password: String) {
+    fun isRegisteredUser(name: String, email: String, password: String) = liveData {
+        var client: RegisterResponse? = null
+        emit(ResultState.Loading)
         try {
-            _isLoading.value = true
-            val client = apiService.login(email, password)
-            val loginResult = client.loginResult
-            _loginResult.value = loginResult as LoginResult
-            _isLoading.value = false
-            Log.d(TAG, "onLoginResult : ${_loginResult.value}")
+            client = apiService.register(name, email, password)
+            _message.value = client.message!!
+            emit(ResultState.Success(client))
         } catch (e: HttpException) {
-            ERROR_RESPONSE = true
+            Log.e("$TAG Error onRegisterdUser :", e.printStackTrace().toString())
+            emit(ResultState.Error(e.message()))
         }
+        Log.d(TAG, "onIsRegisteredUser : $client")
     }
 
-    suspend fun getAllStories() {
-        _isLoading.value = true
-        val client = apiService.getAllStories()
-        _getListStoryItem.value = client.listStory as List<ListStoryItem>
-        _isLoading.value = false
-        Log.d(TAG, "onGetListStoryItem : ${_getListStoryItem.value}")
+    fun login(email: String, password: String) = liveData {
+        var client: LoginResponse? = null
+        emit(ResultState.Loading)
+        try {
+            client = apiService.login(email, password)
+            val loginResult = client.loginResult
+            emit(ResultState.Success(loginResult))
+        } catch (e: HttpException) {
+            Log.e("$TAG Error onLogin :", e.printStackTrace().toString())
+            emit(ResultState.Error(e.message()))
+        }
+        Log.d(TAG, "onLoginResult : $loginResult")
     }
 
-    suspend fun detailStory(id: String) {
-        _isLoading.value = true
-        val client = apiService.detailStory(id)
-        _story.value = client.story as Story
-        _isLoading.value = false
-        Log.d(TAG, "onDetailStory : ${_story.value}")
+    fun getAllStories() = liveData {
+        var client: GetAllStoriesResponse? = null
+        emit(ResultState.Loading)
+        try {
+            client = apiService.getAllStories()
+            emit(ResultState.Success(client))
+        } catch (e: HttpException) {
+            Log.e("$TAG Error onGetAllStories :", e.printStackTrace().toString())
+            emit(ResultState.Error(e.message()))
+        }
+        Log.d(TAG, "onGetAllStories : ${client!!.listStory}")
+    }
+
+    fun detailStory(id: String) = liveData {
+        var client: DetailStoryResponse? = null
+        emit(ResultState.Loading)
+        try {
+            client = apiService.detailStory(id)
+            emit(ResultState.Success(client))
+        } catch (e: HttpException) {
+            Log.e("$TAG Error onDetailStory :", e.printStackTrace().toString())
+            emit(ResultState.Error(e.message()))
+        }
+        Log.d(TAG, "onDetailStory : ${client!!.story}")
     }
 
     fun uploadImage(imageFile: File, description: String) = liveData {
-        _isLoading.value = true
+        var successResponse: AddNewStoryResponse? = null
+        emit(ResultState.Loading)
         val requestBody = description.toRequestBody("text/plain".toMediaType())
         val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
         val multipartBody = MultipartBody.Part.createFormData(
@@ -108,27 +113,27 @@ class UserRepository(
             requestImageFile
         )
         try {
-            val successResponse = apiService.uploadImage(multipartBody, requestBody)
+            successResponse = apiService.uploadImage(multipartBody, requestBody)
             emit(ResultState.Success(successResponse))
-            _isLoading.value = false
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, AddNewStoryResponse::class.java)
             emit(ResultState.Error(errorResponse.message as String))
-            _isLoading.value = false
         }
+        Log.d(TAG, "onUploadImage : ${successResponse!!.message}")
     }
 
-    suspend fun getAllStoriesWithLocation() {
-        _isLoading.value = true
+    fun getAllStoriesWithLocation() = liveData {
+        var client: StoriesWithLocationResponse? = null
+        emit(ResultState.Loading)
         try {
-            val client = apiService.getStoriesWithLocation()
-            _getListStoresWithLocation.value = client.listStoryWithLocation as List<ListStoriesWithLocation>
-            _isLoading.value = false
+            client = apiService.getStoriesWithLocation()
+            emit(ResultState.Success(client))
         } catch (e: HttpException) {
-            Log.e(TAG, "onStoryWithLocation Error : ${e.message()}")
+            Log.e("$TAG Error onGetStoryWithLocation ", e.printStackTrace().toString())
+            emit(ResultState.Error(e.message()))
         }
-        Log.d(TAG, "onGetStoryWithLocation : ${_getListStoresWithLocation}")
+        Log.d(TAG, "onGetStoryWithLocation : ${client!!.listStoryWithLocation}")
     }
 
     companion object {

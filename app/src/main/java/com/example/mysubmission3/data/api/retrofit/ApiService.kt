@@ -5,7 +5,7 @@ import com.example.mysubmission3.data.api.response.DetailStoryResponse
 import com.example.mysubmission3.data.api.response.GetAllStoriesResponse
 import com.example.mysubmission3.data.api.response.LoginResponse
 import com.example.mysubmission3.data.api.response.RegisterResponse
-import com.example.mysubmission3.data.api.response.StoryWithLocationResponse
+import com.example.mysubmission3.data.api.response.StoriesWithLocationResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Field
@@ -53,5 +53,5 @@ interface ApiService {
     @GET("stories")
     suspend fun getStoriesWithLocation(
         @Query("location") location : Int = 1,
-    ): StoryWithLocationResponse
+    ): StoriesWithLocationResponse
 }

@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.mysubmission3.MyPasswordEditText.Companion.PASSWORD_LENGTH_LIMIT
 import com.example.mysubmission3.R
+import com.example.mysubmission3.ResultState
 import com.example.mysubmission3.databinding.ActivitySignUpBinding
 import com.example.mysubmission3.ui.MainViewModel
 import com.example.mysubmission3.ui.ViewModelFactory
@@ -28,6 +29,7 @@ class SignUpActivity : AppCompatActivity() {
     private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this)
     }
+    private var sweetAlertDialog: SweetAlertDialog? = null
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +42,6 @@ class SignUpActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        viewModel.isLoading().observe(this) { bool -> showLoading(bool) }
         viewModel.message().observe(this) {
             Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
         }
@@ -75,17 +75,42 @@ class SignUpActivity : AppCompatActivity() {
                     .setContentText(getString(R.string.error_description_password_login_dialog))
                     .show()
             } else {
-                viewModel.isRegistered(name=name, email=email, password=password)
-                AlertDialog.Builder(this).apply {
-                    setTitle(getString(R.string.registration_success_title_dialog))
-                    setMessage(getString(R.string.registration_success_description_dialog, email))
-                    setPositiveButton(getString(R.string.registration_text_dialog)) { _, _ ->
-                        finish()
+                viewModel.isRegistered(name=name, email=email, password=password).observe(this) { result ->
+                    if (result != null) {
+                        when (result) {
+                            is ResultState.Loading -> { showLoading(true) }
+                            is ResultState.Error -> {
+                                val message = result.error
+                                showError(message)
+                                showLoading(false)
+                            }
+                            is ResultState.Success -> {
+                                showSuccess(email)
+                                showLoading(false)
+                            }
+                        }
                     }
-                    create()
-                    show()
                 }
             }
+        }
+    }
+
+    private fun showError(message: String) {
+        sweetAlertDialog = SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+        sweetAlertDialog!!.setTitleText(getString(R.string.error_title_request))
+        sweetAlertDialog!!.setContentText(message)
+        sweetAlertDialog!!.show()
+    }
+
+    private fun showSuccess(email: String) {
+        AlertDialog.Builder(this).apply {
+            setTitle(getString(R.string.registration_success_title_dialog))
+            setMessage(getString(R.string.registration_success_description_dialog, email))
+            setPositiveButton(getString(R.string.registration_text_dialog)) { _, _ ->
+                finish()
+            }
+            create()
+            show()
         }
     }
 

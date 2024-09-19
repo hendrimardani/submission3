@@ -72,7 +72,6 @@ class AddActivity : AppCompatActivity() {
         }
         supportActionBar!!.title = getString(R.string.add_story)
         binding.loading.visibility = View.INVISIBLE
-        viewModel.isLoading().observe(this) { bool -> showLoading(bool) }
         binding.apply {
             btnCamera.setOnClickListener { startCamera() }
             btnUpload.setOnClickListener { uploadImage() }
@@ -95,12 +94,14 @@ class AddActivity : AppCompatActivity() {
                 viewModel.uploadImage(imageFile, description).observe(this) { result ->
                     if (result != null) {
                         when (result) {
-                            is ResultState.Loading -> { }
-                            is ResultState.Success -> {
-                                showDialog(true, getString(R.string.title_add_success), getString(R.string.message_add_success, result.data.message))
-                            }
+                            is ResultState.Loading -> { showLoading(true) }
                             is ResultState.Error -> {
                                 showDialog(false, getString(R.string.title_add_error), getString(R.string.message_add_error))
+                                showLoading(false)
+                            }
+                            is ResultState.Success -> {
+                                showDialog(true, getString(R.string.title_add_success), getString(R.string.message_add_success, result.data.message))
+                                showLoading(false)
                             }
                         }
                     }

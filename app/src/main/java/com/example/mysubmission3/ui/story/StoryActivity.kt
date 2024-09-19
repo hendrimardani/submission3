@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.mysubmission3.R
+import com.example.mysubmission3.ResultState
 import com.example.mysubmission3.data.api.response.ListStoryItem
 import com.example.mysubmission3.data.api.response.LoginResult
 import com.example.mysubmission3.databinding.ActivityStoryBinding
@@ -49,7 +50,6 @@ class StoryActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        viewModel.isLoading().observe(this) { bool -> showLoading(bool) }
         getDataExtra()
         backButtonCallback()
 
@@ -90,10 +90,30 @@ class StoryActivity : AppCompatActivity() {
         binding.rvList.layoutManager = LinearLayoutManager(this)
         val itemDecoration = DividerItemDecoration(this, LinearLayoutManager(this).orientation)
         binding.rvList.addItemDecoration(itemDecoration)
-        viewModel.getAllStoryItem()
-        viewModel.getListStoryItem().observe(this) { listStoryItem ->
-            setStoryItem(token, listStoryItem)
+        viewModel.getAllStories().observe(this) { result ->
+            if (result != null) {
+                when (result) {
+                    is ResultState.Loading -> { showLoading(true) }
+                    is ResultState.Error -> {
+                        val message = result.error
+                        showError(message)
+                        showLoading(false)
+                    }
+                    is ResultState.Success -> {
+                        val data = result.data.listStory as List<ListStoryItem>
+                        setStoryItem(token, data)
+                        showLoading(false)
+                    }
+                }
+            }
         }
+    }
+
+    private fun showError(message: String) {
+        sweetAlertDialog = SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+        sweetAlertDialog!!.setTitleText(getString(R.string.error_title_request))
+        sweetAlertDialog!!.setContentText(message)
+        sweetAlertDialog!!.show()
     }
 
     private fun setStoryItem(token: String, listStoryItem: List<ListStoryItem>) {

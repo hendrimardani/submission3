@@ -17,10 +17,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.lifecycleScope
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.mysubmission3.MyPasswordEditText.Companion.PASSWORD_LENGTH_LIMIT
 import com.example.mysubmission3.R
+import com.example.mysubmission3.ResultState
 import com.example.mysubmission3.databinding.ActivityLoginBinding
 import com.example.mysubmission3.datastore.user.UserModel
 import com.example.mysubmission3.ui.MainActivity
@@ -30,8 +30,6 @@ import com.example.mysubmission3.ui.signup.SignUpActivity
 import com.example.mysubmission3.ui.story.StoryActivity
 import com.example.mysubmission3.ui.story.StoryActivity.Companion.EXTRA_ACTIVITY
 import com.example.mysubmission3.ui.story.StoryActivity.Companion.EXTRA_OBJECT
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 
 class LoginActivity : AppCompatActivity() {
@@ -52,11 +50,7 @@ class LoginActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        viewModel.isLoading().observe(this) { bool -> showLoading(bool) }
-
-        if (intent.getIntExtra(EXTRA_BACK_DATA, 0) == 1) {
-            viewModel.isLoading().observe(this) { bool -> showLoading(false) }
-        }
+        if (intent.getIntExtra(EXTRA_BACK_DATA, 0) == 1) showLoading(false)
 
         backButtonCallback()
         playAnimation()
@@ -72,16 +66,15 @@ class LoginActivity : AppCompatActivity() {
 
     private fun validationPassword() {
         binding.passwordEditText.addTextChangedListener { object: TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
               setMyButtonEnable()
             }
 
-            override fun afterTextChanged(s: Editable?) {
+            override fun afterTextChanged(s: Editable?) { }
             }
-        } }
+        }
     }
 
     private fun setMyButtonEnable() {
@@ -106,16 +99,18 @@ class LoginActivity : AppCompatActivity() {
                     .setContentText(getString(R.string.error_description_password_login_dialog))
                     .show()
             } else {
-                viewModel.login(email = email, password = password)
-                lifecycleScope.launch {
-                    delay(7000)
-                    if (!ERROR_RESPONSE) {
-                        alertDialog = AlertDialog.Builder(this@LoginActivity)
-                        alertDialog!!.setTitle(getString(R.string.success_title_login_dialog))
-                        alertDialog!!.setMessage(getString(R.string.success_description_momen_login_dialog))
-                        alertDialog!!.setPositiveButton(getString(R.string.registration_text_dialog)) { _, _ ->
-                            viewModel.getLoginResult().observe(this@LoginActivity) { loginResult ->
+                viewModel.login(email = email, password = password).observe(this) { result ->
+                    if (result != null) {
+                        when (result) {
+                            is ResultState.Loading -> { showLoading(true) }
+                            is ResultState.Error -> {
+                                showError()
+                                showLoading(false)
+                            }
+                            is ResultState.Success -> {
+                                val loginResult = result.data!!
                                 viewModel.saveSession(UserModel(loginResult.userId.toString(), loginResult.name.toString(), loginResult.token.toString()))
+                                showLoading(false)
                                 Log.d(TAG, "onLoginSucces: ${loginResult.name}")
                                 val intent = Intent(this@LoginActivity, StoryActivity::class.java)
                                 intent.putExtra(EXTRA_ACTIVITY, TAG)
@@ -124,25 +119,23 @@ class LoginActivity : AppCompatActivity() {
                                 startActivity(intent)
                             }
                         }
-                        alertDialog!!.setCancelable(false)
-                        alertDialog!!.create()
-                        alertDialog!!.show()
-                    } else {
-                        alertDialog = AlertDialog.Builder(this@LoginActivity)
-                        alertDialog!!.setTitle(getString(R.string.error_title_signup_account_login_dialog))
-                        alertDialog!!.setMessage(getString(R.string.error_description_signup_account_login_dialog))
-                        alertDialog!!.setPositiveButton(getString(R.string.next_signup_account)) { _, _ ->
-                            startActivity(Intent(this@LoginActivity, SignUpActivity::class.java))
-                        }
-                        alertDialog!!.setCancelable(false)
-                        alertDialog!!.create()
-                        alertDialog!!.show()
-                        }
-                        ERROR_RESPONSE = false
                     }
                 }
             }
         }
+    }
+
+    private fun showError() {
+        alertDialog = AlertDialog.Builder(this@LoginActivity)
+        alertDialog!!.setTitle(getString(R.string.error_title_signup_account_login_dialog))
+        alertDialog!!.setMessage(getString(R.string.error_description_signup_account_login_dialog))
+        alertDialog!!.setPositiveButton(getString(R.string.next_signup_account)) { _, _ ->
+            startActivity(Intent(this@LoginActivity, SignUpActivity::class.java))
+        }
+        alertDialog!!.setCancelable(false)
+        alertDialog!!.create()
+        alertDialog!!.show()
+    }
 
     private fun showLoading(isLoading: Boolean) {
         binding.loading.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
@@ -172,11 +165,11 @@ class LoginActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         if (alertDialog != null) alertDialog = null
+        if (sweetAlertDialog != null) sweetAlertDialog = null
     }
 
     companion object {
         private val TAG = LoginActivity::class.java.simpleName
-        var ERROR_RESPONSE = false
         const val EXTRA_BACK_DATA = "extra_back_data"
     }
 }

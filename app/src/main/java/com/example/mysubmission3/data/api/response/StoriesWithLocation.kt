@@ -2,7 +2,7 @@ package com.example.mysubmission3.data.api.response
 
 import com.google.gson.annotations.SerializedName
 
-data class StoryWithLocationResponse(
+data class StoriesWithLocationResponse(
 
 	@field:SerializedName("listStory")
 	val listStoryWithLocation: List<ListStoriesWithLocation?>? = null,

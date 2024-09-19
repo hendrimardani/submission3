@@ -3,7 +3,10 @@ package com.example.mysubmission3.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import com.example.mysubmission3.ResultState
+import com.example.mysubmission3.data.api.response.GetAllStoriesResponse
 import com.example.mysubmission3.data.api.response.ListStoriesWithLocation
 import com.example.mysubmission3.data.api.response.ListStoryItem
 import com.example.mysubmission3.data.api.response.LoginResult
@@ -30,59 +33,29 @@ class MainViewModel(private val userRepository: UserRepository): ViewModel() {
         }
     }
 
-    fun isLoading(): LiveData<Boolean> {
-        return userRepository.isLoading
-    }
-
     fun message(): LiveData<String> {
         return userRepository.message
     }
 
-    fun getLoginResult(): LiveData<LoginResult> {
-        return userRepository.loginResult
+    fun isRegistered(name: String, email: String, password: String) = liveData {
+        emitSource(userRepository.isRegisteredUser(name, email, password))
     }
 
-    fun isRegistered(name: String, email: String, password: String) {
-        viewModelScope.launch {
-            userRepository.isRegisteredUser(name, email, password)
-        }
+    fun login(email: String, password: String) = liveData {
+        emitSource(userRepository.login(email, password))
     }
 
-    fun login(email: String, password: String) {
-        viewModelScope.launch {
-            userRepository.login(email, password)
-        }
+    fun getAllStories() = liveData {
+        emitSource(userRepository.getAllStories())
     }
 
-    fun getAllStoryItem() {
-        viewModelScope.launch {
-            userRepository.getAllStories()
-        }
-    }
-
-    fun getListStoryItem(): LiveData<List<ListStoryItem>> {
-        return userRepository.getListStoryItem
-    }
-
-    fun detailStory(id: String) {
-        viewModelScope.launch {
-            userRepository.detailStory(id)
-        }
-    }
-
-    fun getDetailStory(): LiveData<Story> {
-        return userRepository.story
+    fun getDetailStory(id: String) = liveData {
+        emitSource(userRepository.detailStory(id))
     }
 
     fun uploadImage(file: File, description: String) = userRepository.uploadImage(file, description)
 
-    fun getAllStoriesWithLocation() {
-        viewModelScope.launch {
-            userRepository.getAllStoriesWithLocation()
-        }
-    }
-
-    fun getListStoriesWithLocation(): LiveData<List<ListStoriesWithLocation>> {
-        return userRepository.getListStoresWithLocation
+    fun getAllStoriesWithLocation() = liveData {
+        emitSource(userRepository.getAllStoriesWithLocation())
     }
 }

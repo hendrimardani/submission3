@@ -8,8 +8,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
 import com.example.mysubmission3.R
+import com.example.mysubmission3.ResultState
 import com.example.mysubmission3.databinding.ActivityDetailBinding
 import com.example.mysubmission3.ui.MainViewModel
 import com.example.mysubmission3.ui.ViewModelFactory
@@ -19,6 +21,7 @@ class DetailActivity : AppCompatActivity() {
     private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this)
     }
+    private var sweetAlertDialog: SweetAlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +34,6 @@ class DetailActivity : AppCompatActivity() {
             insets
         }
         supportActionBar!!.title = getString(R.string.detail_activity)
-        viewModel.isLoading().observe(this) { bool -> showLoading(bool) }
         getDataExtra()
     }
 
@@ -39,16 +41,36 @@ class DetailActivity : AppCompatActivity() {
         val getIdData = intent.getStringExtra(EXTRA_ID) as String
         val getTokenData = intent.getStringExtra(EXTRA_TOKEN) as String
         Log.d(TAG, "ID User: $getIdData, Token User : $getTokenData")
-        viewModel.detailStory(getIdData)
-        viewModel.getDetailStory().observe(this) { storyUser ->
-            Glide.with(this@DetailActivity)
-                .load(storyUser.photoUrl)
-                .into(binding.ivDetail)
-            binding.tvNameDetail.text = storyUser.name
-            binding.tvCreatedAtDetail.text = getString(R.string.createdAt, storyUser.createdAt)
-            binding.tvIdDetail.text = storyUser.id
-            binding.tvDescriptionDetail.text = storyUser.description
+        viewModel.getDetailStory(getIdData).observe(this) { result ->
+            if (result != null) {
+                when (result) {
+                    is ResultState.Loading -> { showLoading(true) }
+                    is ResultState.Error -> {
+                        val message = result.error
+                        showError(message)
+                        showLoading(false)
+                    }
+                    is ResultState.Success -> {
+                        val data = result.data.story!!
+                        Glide.with(this@DetailActivity)
+                            .load(data.photoUrl)
+                            .into(binding.ivDetail)
+                        binding.tvNameDetail.text = data.name
+                        binding.tvCreatedAtDetail.text = getString(R.string.createdAt, data.createdAt)
+                        binding.tvIdDetail.text = data.id
+                        binding.tvDescriptionDetail.text = data.description
+                        showLoading(false)
+                    }
+                }
+            }
         }
+    }
+
+    private fun showError(message: String) {
+        sweetAlertDialog = SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+        sweetAlertDialog!!.setTitleText(getString(R.string.error_title_request))
+        sweetAlertDialog!!.setContentText(message)
+        sweetAlertDialog!!.show()
     }
 
     private fun showLoading(isLoading: Boolean) {
