@@ -60,4 +60,6 @@
     <string name="detail_activity">Detail</string>
     <string name="title_information_dialog">Information</string>
     <string name="description_information_dialog">This app already supports three languages: Indonesian, English, and French. To change it press on the three dots in the top right corner</string>
+    <string name="maps">Maps</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>

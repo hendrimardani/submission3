@@ -60,4 +60,5 @@
     <string name="detail_activity">Détail</string>
     <string name="title_information_dialog">Informations</string>
     <string name="description_information_dialog">Cette application prend déjà en charge trois langues : l\'indonésien, l\'anglais et le français. Pour changer de langue, appuyez sur les trois points dans le coin supérieur droit.</string>
+    <string name="maps">Maps</string>
 </resources>

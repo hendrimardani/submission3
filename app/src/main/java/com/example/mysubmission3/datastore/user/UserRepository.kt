@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.example.mysubmission3.ResultState
 import com.example.mysubmission3.data.api.response.AddNewStoryResponse
+import com.example.mysubmission3.data.api.response.ListStoriesWithLocation
 import com.example.mysubmission3.data.api.response.ListStoryItem
 import com.example.mysubmission3.data.api.response.LoginResult
 import com.example.mysubmission3.data.api.response.Story
@@ -17,6 +18,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.internal.toImmutableList
 import retrofit2.HttpException
 import java.io.File
 
@@ -24,6 +26,9 @@ class UserRepository(
     private val apiService: ApiService,
     private val userPreference: UserPreference
 ) {
+    private var _getListStoresWithLocation = MutableLiveData<List<ListStoriesWithLocation>>()
+    val getListStoresWithLocation: LiveData<List<ListStoriesWithLocation>> = _getListStoresWithLocation
+
     private var _story = MutableLiveData<Story>()
     val story: LiveData<Story> = _story
 
@@ -112,6 +117,18 @@ class UserRepository(
             emit(ResultState.Error(errorResponse.message as String))
             _isLoading.value = false
         }
+    }
+
+    suspend fun getAllStoriesWithLocation() {
+        _isLoading.value = true
+        try {
+            val client = apiService.getStoriesWithLocation()
+            _getListStoresWithLocation.value = client.listStoryWithLocation as List<ListStoriesWithLocation>
+            _isLoading.value = false
+        } catch (e: HttpException) {
+            Log.e(TAG, "onStoryWithLocation Error : ${e.message()}")
+        }
+        Log.d(TAG, "onGetStoryWithLocation : ${_getListStoresWithLocation}")
     }
 
     companion object {

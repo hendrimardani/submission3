@@ -59,4 +59,5 @@
     <string name="detail_activity">Detail</string>
     <string name="title_information_dialog">Informasi</string>
     <string name="description_information_dialog">Aplikasi ini sudah mendukung tiga bahasa: Indonesia, Inggris dan Francis. Untuk mengubahnya tekan pada pojok kanan atas.</string>
+    <string name="maps">Maps</string>
 </resources>

@@ -5,6 +5,7 @@ import com.example.mysubmission3.data.api.response.DetailStoryResponse
 import com.example.mysubmission3.data.api.response.GetAllStoriesResponse
 import com.example.mysubmission3.data.api.response.LoginResponse
 import com.example.mysubmission3.data.api.response.RegisterResponse
+import com.example.mysubmission3.data.api.response.StoryWithLocationResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Field
@@ -14,6 +15,8 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
+
 
 interface ApiService {
 
@@ -46,4 +49,9 @@ interface ApiService {
         @Part file: MultipartBody.Part,
         @Part("description") description: RequestBody
     ): AddNewStoryResponse
+
+    @GET("stories")
+    suspend fun getStoriesWithLocation(
+        @Query("location") location : Int = 1,
+    ): StoryWithLocationResponse
 }

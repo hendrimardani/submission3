@@ -30,6 +30,7 @@ import com.example.mysubmission3.ui.add.AddActivity
 import com.example.mysubmission3.ui.detail.DetailActivity
 import com.example.mysubmission3.ui.detail.DetailActivity.Companion.EXTRA_ID
 import com.example.mysubmission3.ui.detail.DetailActivity.Companion.EXTRA_TOKEN
+import com.example.mysubmission3.ui.maps.MapsActivity
 
 class StoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStoryBinding
@@ -66,10 +67,13 @@ class StoryActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.menu_logout -> logoutUser()
             R.id.menu_change_language -> changeLanguage()
+            R.id.menu_maps -> displayMaps()
 
         }
         return super.onOptionsItemSelected(item)
     }
+
+    private fun displayMaps() = startActivity(Intent(this, MapsActivity::class.java))
 
     private fun changeLanguage() {
         startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))

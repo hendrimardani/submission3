@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.mysubmission3.data.api.response.ListStoriesWithLocation
 import com.example.mysubmission3.data.api.response.ListStoryItem
 import com.example.mysubmission3.data.api.response.LoginResult
 import com.example.mysubmission3.data.api.response.Story
@@ -53,14 +54,14 @@ class MainViewModel(private val userRepository: UserRepository): ViewModel() {
         }
     }
 
-    fun getListStoryItem(): LiveData<List<ListStoryItem>> {
-        return userRepository.getListStoryItem
-    }
-
     fun getAllStoryItem() {
         viewModelScope.launch {
             userRepository.getAllStories()
         }
+    }
+
+    fun getListStoryItem(): LiveData<List<ListStoryItem>> {
+        return userRepository.getListStoryItem
     }
 
     fun detailStory(id: String) {
@@ -74,4 +75,14 @@ class MainViewModel(private val userRepository: UserRepository): ViewModel() {
     }
 
     fun uploadImage(file: File, description: String) = userRepository.uploadImage(file, description)
+
+    fun getAllStoriesWithLocation() {
+        viewModelScope.launch {
+            userRepository.getAllStoriesWithLocation()
+        }
+    }
+
+    fun getListStoriesWithLocation(): LiveData<List<ListStoriesWithLocation>> {
+        return userRepository.getListStoresWithLocation
+    }
 }
