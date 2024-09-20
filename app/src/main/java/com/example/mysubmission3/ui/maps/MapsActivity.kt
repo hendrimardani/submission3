@@ -47,9 +47,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        mMap.uiSettings.isZoomControlsEnabled = true
+        mMap.uiSettings.isIndoorLevelPickerEnabled = true
+        mMap.uiSettings.isCompassEnabled = true
+        mMap.uiSettings.isMapToolbarEnabled = true
 
         addManyMarkersStories()
         setMapStyle()
+        getMyLocation()
+    }
+
+    private fun getMyLocation() {
+        if (ContextCompat.checkSelfPermission(
+                this.applicationContext,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            mMap.isMyLocationEnabled = EXTRA_CURRENT_LOCATION
+        }
     }
 
     private fun addManyMarkersStories() {
@@ -114,7 +129,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     companion object {
-        const val EXTRA_CURRENT_LOCATION = "extra_current_location"
         private val TAG = MapsActivity::class.java.simpleName
+        var EXTRA_CURRENT_LOCATION = false
     }
 }

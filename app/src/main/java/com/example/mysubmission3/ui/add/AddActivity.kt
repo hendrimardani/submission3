@@ -10,7 +10,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,8 +27,6 @@ import com.example.mysubmission3.getImageUri
 import com.example.mysubmission3.reduceFileImage
 import com.example.mysubmission3.ui.MainViewModel
 import com.example.mysubmission3.ui.ViewModelFactory
-import com.example.mysubmission3.ui.maps.MapsActivity
-import com.example.mysubmission3.ui.maps.MapsActivity.Companion
 import com.example.mysubmission3.ui.maps.MapsActivity.Companion.EXTRA_CURRENT_LOCATION
 import com.example.mysubmission3.ui.story.StoryActivity
 import com.example.mysubmission3.ui.story.StoryActivity.Companion.EXTRA_ACTIVITY
@@ -44,7 +41,6 @@ class AddActivity : AppCompatActivity() {
     private var currentImageUri: Uri? = null
     private var customDialog: Dialog? = null
     private var sweetAlertDialog: SweetAlertDialog? = null
-    var isCurrentLocation: Boolean = false
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -92,18 +88,16 @@ class AddActivity : AppCompatActivity() {
         binding.apply {
             cbCurrentLocation.setOnCheckedChangeListener { buttonView, isChecked ->
                 if (isChecked) {
-                    isCurrentLocation = true
+                    EXTRA_CURRENT_LOCATION = true
+                    getMyLocation()
                 } else {
-                    isCurrentLocation = false
+                    EXTRA_CURRENT_LOCATION = false
                 }
             }
             btnCamera.setOnClickListener { startCamera() }
             btnUpload.setOnClickListener { uploadImage() }
             btnGallery.setOnClickListener { startGallery() }
         }
-        val isCurrentLocation = intent.getBooleanExtra(EXTRA_CURRENT_LOCATION, false)
-        Log.d(TAG, isCurrentLocation.toString())
-        if (isCurrentLocation) getMyLocation()
     }
 
     private fun getMyLocation() {
@@ -112,6 +106,7 @@ class AddActivity : AppCompatActivity() {
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
+            EXTRA_CURRENT_LOCATION = true
         } else {
             requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
         }
@@ -197,7 +192,6 @@ class AddActivity : AppCompatActivity() {
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 intent.putExtra(EXTRA_ACTIVITY, TAG)
                 intent.putExtra(EXTRA_OBJECT, userModel)
-                intent.putExtra(EXTRA_CURRENT_LOCATION, isCurrentLocation)
                 startActivity(intent)
             }
         }
