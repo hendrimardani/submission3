@@ -63,4 +63,5 @@
     <string name="maps">Maps</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="error_title_request">Error Receiving Data</string>
+    <string name="retry">Try Again</string>
 </resources>

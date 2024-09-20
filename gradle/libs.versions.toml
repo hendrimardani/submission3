@@ -9,10 +9,10 @@ appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.9.2"
 constraintlayout = "2.1.4"
-lifecycleLivedataKtx = "2.8.5"
-lifecycleViewmodelKtx = "2.8.5"
-navigationFragmentKtx = "2.8.0"
-navigationUiKtx = "2.8.0"
+lifecycleLivedataKtx = "2.8.6"
+lifecycleViewmodelKtx = "2.8.6"
+navigationFragmentKtx = "2.8.1"
+navigationUiKtx = "2.8.1"
 comSquareupRetrofit2ConverterGson = "2.9.0"
 comSquareupRetrofit2Retrofit = "2.9.0"
 loggingInterceptor = "5.0.0-alpha.2"
@@ -21,13 +21,16 @@ roomCompiler = "2.6.1"
 roomRuntime = "2.6.1"
 glide = "4.16.0"
 datastorePreferences = "1.1.1"
-lifecycleRuntime = "2.8.5"
+lifecycleRuntime = "2.8.6"
 workRuntimeKtx = "2.9.1"
 workRuntime = "2.9.1"
 sweetAlert = "1.5.6"
 googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
 playServicesMaps = "19.0.0"
 lottieVersion = "3.4.0"
+pagingRuntimeKtx = "3.3.2"
+roomPaging = "2.6.1"
+roomKtx = "2.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -56,6 +59,9 @@ androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "
 android-com-github-f0ris-sweetalert-library = { module = "com.github.f0ris.sweetalert:library", version.ref = "sweetAlert" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottieVersion" }
+androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
+androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "roomPaging" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

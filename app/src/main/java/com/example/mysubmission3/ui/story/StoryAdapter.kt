@@ -4,14 +4,15 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mysubmission3.data.api.response.ListStoryItem
 import com.example.mysubmission3.databinding.ItemListBinding
 
-class StoryAdapter(val context: Context) : ListAdapter<ListStoryItem, StoryAdapter.ViewHolder>(DIFF_CALLBACK) {
+class StoryAdapter(val context: Context)
+    : PagingDataAdapter<ListStoryItem, StoryAdapter.ViewHolder>(DIFF_CALLBACK) {
     private var onItemClickCallback: OnItemClickCallback? = null
 
     interface OnItemClickCallback {
@@ -43,7 +44,7 @@ class StoryAdapter(val context: Context) : ListAdapter<ListStoryItem, StoryAdapt
             }
 
             override fun areContentsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
-                return oldItem == newItem
+                return oldItem .id == newItem.id
             }
         }
     }
@@ -55,6 +56,6 @@ class StoryAdapter(val context: Context) : ListAdapter<ListStoryItem, StoryAdapt
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(item!!)
     }
 }

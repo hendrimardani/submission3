@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.mysubmission3.ResultState
 import com.example.mysubmission3.data.api.response.GetAllStoriesResponse
 import com.example.mysubmission3.data.api.response.ListStoriesWithLocation
@@ -17,6 +19,9 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 class MainViewModel(private val userRepository: UserRepository): ViewModel() {
+    val story: LiveData<PagingData<ListStoryItem>> =
+        userRepository.getAllStories().cachedIn(viewModelScope)
+
     fun saveSession(userModel: UserModel) {
         viewModelScope.launch {
             userRepository.saveSession(userModel)

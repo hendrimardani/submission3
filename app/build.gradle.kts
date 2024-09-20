@@ -74,6 +74,9 @@ dependencies {
     implementation(libs.androidx.work.runtime)
     implementation(libs.android.com.github.f0ris.sweetalert.library)
     implementation(libs.lottie)
+    implementation(libs.androidx.room.paging)
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.androidx.room.ktx)
 
     // testing
     testImplementation(libs.junit)

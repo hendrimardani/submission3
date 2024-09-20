@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.mysubmission3.R
@@ -24,6 +23,7 @@ import com.example.mysubmission3.data.api.response.ListStoryItem
 import com.example.mysubmission3.data.api.response.LoginResult
 import com.example.mysubmission3.databinding.ActivityStoryBinding
 import com.example.mysubmission3.datastore.user.UserModel
+import com.example.mysubmission3.ui.LoadingStateAdapter
 import com.example.mysubmission3.ui.MainActivity
 import com.example.mysubmission3.ui.MainViewModel
 import com.example.mysubmission3.ui.ViewModelFactory
@@ -88,38 +88,15 @@ class StoryActivity : AppCompatActivity() {
 
     private fun setupRecyclerViewItem(token: String) {
         binding.rvList.layoutManager = LinearLayoutManager(this)
-        val itemDecoration = DividerItemDecoration(this, LinearLayoutManager(this).orientation)
-        binding.rvList.addItemDecoration(itemDecoration)
-        viewModel.getAllStories().observe(this) { result ->
-            if (result != null) {
-                when (result) {
-                    is ResultState.Loading -> { showLoading(true) }
-                    is ResultState.Error -> {
-                        val message = result.error
-                        showError(message)
-                        showLoading(false)
-                    }
-                    is ResultState.Success -> {
-                        val data = result.data.listStory as List<ListStoryItem>
-                        setStoryItem(token, data)
-                        showLoading(false)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun showError(message: String) {
-        sweetAlertDialog = SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-        sweetAlertDialog!!.setTitleText(getString(R.string.error_title_request))
-        sweetAlertDialog!!.setContentText(message)
-        sweetAlertDialog!!.show()
-    }
-
-    private fun setStoryItem(token: String, listStoryItem: List<ListStoryItem>) {
         val adapter = StoryAdapter(this)
-        adapter.submitList(listStoryItem)
-        binding.rvList.adapter = adapter
+        binding.rvList.adapter = adapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                adapter.retry()
+            }
+        )
+        viewModel.story.observe(this) { pagingDataListStory ->
+            adapter.submitData(lifecycle, pagingDataListStory)
+        }
         adapter.setOnItemClickCallback(object : StoryAdapter.OnItemClickCallback {
             override fun onItemClicked(item: ListStoryItem) {
                 val intent = Intent(this@StoryActivity, DetailActivity::class.java)
@@ -128,6 +105,13 @@ class StoryActivity : AppCompatActivity() {
                 startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(this@StoryActivity).toBundle())
             }
         })
+    }
+
+    private fun showError(message: String) {
+        sweetAlertDialog = SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+        sweetAlertDialog!!.setTitleText(getString(R.string.error_title_request))
+        sweetAlertDialog!!.setContentText(message)
+        sweetAlertDialog!!.show()
     }
 
     private fun showLoading(isLoading: Boolean) {

@@ -4,15 +4,22 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.example.mysubmission3.ResultState
 import com.example.mysubmission3.data.api.response.AddNewStoryResponse
 import com.example.mysubmission3.data.api.response.DetailStoryResponse
-import com.example.mysubmission3.data.api.response.GetAllStoriesResponse
+import com.example.mysubmission3.data.api.response.ListStoryItem
 import com.example.mysubmission3.data.api.response.LoginResponse
 import com.example.mysubmission3.data.api.response.LoginResult
 import com.example.mysubmission3.data.api.response.RegisterResponse
 import com.example.mysubmission3.data.api.response.StoriesWithLocationResponse
 import com.example.mysubmission3.data.api.retrofit.ApiService
+import com.example.mysubmission3.data.database.StoryDatabase
+import com.example.mysubmission3.data.paging.StoryRemoteMediator
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MediaType.Companion.toMediaType
@@ -23,6 +30,7 @@ import retrofit2.HttpException
 import java.io.File
 
 class UserRepository(
+    private val storyDatabase: StoryDatabase,
     private val apiService: ApiService,
     private val userPreference: UserPreference
 ) {
@@ -76,17 +84,13 @@ class UserRepository(
         Log.d(TAG, "onLoginResult : $loginResult")
     }
 
-    fun getAllStories() = liveData {
-        var client: GetAllStoriesResponse? = null
-        emit(ResultState.Loading)
-        try {
-            client = apiService.getAllStories()
-            emit(ResultState.Success(client))
-        } catch (e: HttpException) {
-            Log.e("$TAG Error onGetAllStories :", e.printStackTrace().toString())
-            emit(ResultState.Error(e.message()))
-        }
-        Log.d(TAG, "onGetAllStories : ${client!!.listStory}")
+    @OptIn(ExperimentalPagingApi::class)
+    fun getAllStories(): LiveData<PagingData<ListStoryItem>> {
+        return  Pager(
+            config = PagingConfig(pageSize = 1),
+            remoteMediator = StoryRemoteMediator(storyDatabase, apiService),
+            pagingSourceFactory = { storyDatabase.storyDao().getAllStories() }
+        ).liveData
     }
 
     fun detailStory(id: String) = liveData {
