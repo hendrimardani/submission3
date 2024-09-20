@@ -1,11 +1,14 @@
 package com.example.mysubmission3.ui.maps
 
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.mysubmission3.R
 import com.example.mysubmission3.ResultState
@@ -111,6 +114,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     companion object {
+        const val EXTRA_CURRENT_LOCATION = "extra_current_location"
         private val TAG = MapsActivity::class.java.simpleName
     }
 }

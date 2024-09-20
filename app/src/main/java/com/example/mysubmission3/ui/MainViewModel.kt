@@ -50,10 +50,6 @@ class MainViewModel(private val userRepository: UserRepository): ViewModel() {
         emitSource(userRepository.login(email, password))
     }
 
-    fun getAllStories() = liveData {
-        emitSource(userRepository.getAllStories())
-    }
-
     fun getDetailStory(id: String) = liveData {
         emitSource(userRepository.detailStory(id))
     }
