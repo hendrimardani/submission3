@@ -1,5 +1,6 @@
 package com.example.mysubmission3.data.paging
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -23,7 +24,6 @@ class StoryRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, ListStoryItem>
     ): MediatorResult {
-        print("CEK TEST = $loadType")
         val page = when (loadType) {
             LoadType.REFRESH ->{
                 val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
@@ -44,9 +44,11 @@ class StoryRemoteMediator(
         }
 
         try {
-            val responseData = apiService.getAllStories(page, state.config.pageSize)
+            val responseData = apiService.getAllStories(page, state.config.pageSize).listStory!!
+            Log.d("$TAG responseData : ", responseData.toString())
 
             val endOfPaginationReached = responseData.isEmpty()
+            Log.d("$TAG endOfPaginationReached :", endOfPaginationReached.toString())
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     database.remoteKeysDao().deleteRemoteKeys()
@@ -55,13 +57,14 @@ class StoryRemoteMediator(
                 val prevKey = if (page == 1) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
                 val keys = responseData.map {
-                    RemoteKeys(id = it.id, prevKey = prevKey, nextKey = nextKey)
+                    RemoteKeys(id = it!!.id, prevKey = prevKey, nextKey = nextKey)
                 }
                 database.remoteKeysDao().insertAll(keys)
-                database.storyDao().insertStory(responseData)
+                database.storyDao().insertStory(responseData as List<ListStoryItem>)
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: Exception) {
+            Log.d("$TAG exeption :", exception.message.toString())
             return MediatorResult.Error(exception)
         }
     }
@@ -88,5 +91,6 @@ class StoryRemoteMediator(
 
     private companion object {
         const val INITIAL_PAGE_INDEX = 1
+        private val TAG = StoryRemoteMediator::class.java.simpleName
     }
 }

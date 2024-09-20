@@ -87,7 +87,7 @@ class UserRepository(
     @OptIn(ExperimentalPagingApi::class)
     fun getAllStories(): LiveData<PagingData<ListStoryItem>> {
         return  Pager(
-            config = PagingConfig(pageSize = 1),
+            config = PagingConfig(pageSize = 5),
             remoteMediator = StoryRemoteMediator(storyDatabase, apiService),
             pagingSourceFactory = { storyDatabase.storyDao().getAllStories() }
         ).liveData

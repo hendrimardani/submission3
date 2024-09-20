@@ -40,7 +40,7 @@ interface ApiService {
     suspend fun getAllStories(
         @Query("page") page: Int,
         @Query("size") size: Int
-    ): List<ListStoryItem>
+    ): GetAllStoriesResponse
 
     @GET("stories/{id}")
     suspend fun detailStory(
