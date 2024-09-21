@@ -46,6 +46,7 @@ android {
     // Tambahkan ini error Method isLoggable in android.util.Log not mocked.
     testOptions {
         unitTests.isReturnDefaultValues = true
+        animationsDisabled = true
     }
 }
 
@@ -89,6 +90,9 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.core.testing) 
     androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.mockwebserver)
+    androidTestImplementation(libs.okhttp3.okhttp.tls)
+    androidTestImplementation(libs.androidx.runner)
 
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.inline)
