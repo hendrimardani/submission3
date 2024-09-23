@@ -7,13 +7,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/add"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         tools:context=".ui.add.AddActivity">
 
         <ImageView
             android:id="@+id/iv_add"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="400dp"
             android:layout_marginHorizontal="@dimen/margin_horizontal"
             android:layout_marginVertical="@dimen/margin_top_bottom"
             android:src="@drawable/gambar_no_image"
@@ -30,19 +30,21 @@
             android:layout_marginHorizontal="@dimen/margin_horizontal"
             android:text="@string/camera"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/et_description_add"
             app:layout_constraintTop_toBottomOf="@+id/iv_add"
             app:layout_constraintEnd_toStartOf="@+id/btn_gallery" />
 
         <Button
             android:id="@+id/btn_gallery"
+            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="?attr/materialButtonOutlinedStyle"
             android:layout_marginHorizontal="@dimen/margin_horizontal"
             android:text="@string/gallery"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_camera"
+            app:layout_constraintEnd_toStartOf="@id/cb_current_location"
             app:layout_constraintStart_toEndOf="@id/btn_camera"
-            app:layout_constraintTop_toTopOf="@id/btn_camera"
-            app:layout_constraintEnd_toStartOf="@id/cb_current_location" />
+            app:layout_constraintTop_toTopOf="@id/btn_camera" />
 
         <!-- atribute gravity supaya mulai dari paling atas -->
         <EditText
@@ -57,20 +59,21 @@
             android:layout_marginVertical="@dimen/margin_top_bottom"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_upload"
             app:layout_constraintTop_toBottomOf="@id/btn_camera" />
 
         <Button
             android:id="@+id/btn_upload"
+            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="?attr/materialButtonOutlinedStyle"
             android:layout_marginHorizontal="@dimen/margin_horizontal"
-            android:text="@string/upload"
             android:layout_marginTop="@dimen/margin_top_bottom"
-            app:layout_constraintTop_toBottomOf="@id/et_description_add"
+            android:text="@string/upload"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/et_description_add" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/loading"

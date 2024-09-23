@@ -7,12 +7,7 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.mysubmission3.ResultState
-import com.example.mysubmission3.data.api.response.GetAllStoriesResponse
-import com.example.mysubmission3.data.api.response.ListStoriesWithLocation
 import com.example.mysubmission3.data.api.response.ListStoryItem
-import com.example.mysubmission3.data.api.response.LoginResult
-import com.example.mysubmission3.data.api.response.Story
 import com.example.mysubmission3.datastore.user.UserModel
 import com.example.mysubmission3.datastore.user.UserRepository
 import kotlinx.coroutines.launch

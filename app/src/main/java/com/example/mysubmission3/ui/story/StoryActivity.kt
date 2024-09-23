@@ -7,7 +7,6 @@ import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -104,17 +103,6 @@ class StoryActivity : AppCompatActivity() {
                 startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(this@StoryActivity).toBundle())
             }
         })
-    }
-
-    private fun showError(message: String) {
-        sweetAlertDialog = SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-        sweetAlertDialog!!.setTitleText(getString(R.string.error_title_request))
-        sweetAlertDialog!!.setContentText(message)
-        sweetAlertDialog!!.show()
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding.loading.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
     }
 
     @SuppressLint("SuspiciousIndentation")

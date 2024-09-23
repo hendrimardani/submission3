@@ -21,7 +21,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 class LoginActivityTest {
-    private val dummyEmail = "hendrimardani290301@gmail.com"
+    private val dummyEmail = "hendrimardani@gmail.com"
     private val dummyPassword = "hendri123123"
 
     @Before

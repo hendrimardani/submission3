@@ -65,4 +65,5 @@
     <string name="error_title_request">Error Receiving Data</string>
     <string name="retry">Try Again</string>
     <string name="cb_current_location">Display with \ncurrent location</string>
+    <string name="fab_content_description">Menambahkan data story</string>
 </resources>
