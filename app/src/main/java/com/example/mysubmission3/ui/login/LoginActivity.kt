@@ -50,8 +50,7 @@ class LoginActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        if (intent.getIntExtra(EXTRA_BACK_DATA, 0) == 1)
-//            showLoading(false)
+        if (intent.getIntExtra(EXTRA_BACK_DATA, 0) == 1) showLoading(false)
 
         backButtonCallback()
         playAnimation()
@@ -104,16 +103,16 @@ class LoginActivity : AppCompatActivity() {
                     if (result != null) {
                         when (result) {
                             is ResultState.Loading -> {
-//                                showLoading(true)
+                                showLoading(true)
                             }
                             is ResultState.Error -> {
                                 showError()
-//                                showLoading(false)
+                                showLoading(false)
                             }
                             is ResultState.Success -> {
                                 val loginResult = result.data!!
                                 viewModel.saveSession(UserModel(loginResult.userId.toString(), loginResult.name.toString(), loginResult.token.toString()))
-//                                showLoading(false)
+                                showLoading(false)
                                 Log.d(TAG, "onLoginSucces: ${loginResult.name}")
                                 val intent = Intent(this@LoginActivity, StoryActivity::class.java)
                                 intent.putExtra(EXTRA_ACTIVITY, TAG)
@@ -140,9 +139,9 @@ class LoginActivity : AppCompatActivity() {
         alertDialog!!.show()
     }
 
-//    private fun showLoading(isLoading: Boolean) {
-//        binding.loading.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
-//    }
+    private fun showLoading(isLoading: Boolean) {
+        binding.loading.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
+    }
 
     private fun playAnimation() {
         ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
