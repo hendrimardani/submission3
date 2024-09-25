@@ -85,7 +85,6 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
     // testing
-    testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.core.testing) 
@@ -93,7 +92,9 @@ dependencies {
     androidTestImplementation(libs.mockwebserver)
     androidTestImplementation(libs.okhttp3.okhttp.tls)
     androidTestImplementation(libs.androidx.runner)
+    androidTestImplementation(libs.androidx.test.espresso)
 
+    testImplementation(libs.junit)
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.inline)
     testImplementation(libs.androidx.core.testing)
